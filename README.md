@@ -152,6 +152,44 @@ el resultado de `display` será:
 . . 5 |. 1 . |3 . . 
 ```
 
+## Primer paso: Eliminación
+
+Como primer paso en nuestra estratégia usaremos lo que llamamos **eliminación**. Empezaremos mirando una casilla y analizando que valores pueden ir allí. Por ejemplo en la posición E6, marcado con una X en el siguiente tablero:
+```
+. . 3 |. 2 . |6 . . 
+9 . . |3 . 5 |. . 1 
+. . 1 |8 . 6 |4 . . 
+------+------+------
+. . 8 |1 . 2 |9 . . 
+7 . . |. . X |. . 8 
+. . 6 |7 . 8 |2 . . 
+------+------+------
+. . 2 |6 . 9 |5 . . 
+8 . . |2 . 3 |. . 9 
+. . 5 |. 1 . |3 . . 
+```
+Vemos de entre los posibles valores `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9` no todos son posibles puesto que ya aparecen o bien en la misma columna, misma fila o en el cuadrado 3x3 correspondiente a la posición E6. En concreto, el `1`, `7`, `2` y `8` ya se encuentran en el mismo cuadrado 3x3. Los valores `3`, `5`, `6` y `9` se encuentran en la misma columna. Y los `7` y `8` se encuentran en la misma fila, aunque ya los habiamos descartado por encontrarse en el mismo cuadrado. Por tanto, en este caso, solo tenemos el `4` que cumple los requisitos.
+
+Now that we know how to eliminate values, we can take one pass, go over every box that has a value, and eliminate the values that can't appear on the box si ya aparecen en su misma columna, fila o cuadrado.
+
+Vamos a incorporar en la anterior función `grid_values()` y añadir información con los valores posibles para una determinada casilla. Por ejemplo en `B5`pondremos el valor `47`(dado que `4` y `7`son los dos únicos valores posibles para esta casilla). Para ello, de momento vamos a reprogramar la función `grid_values()` para que nos devuelva `'123456789'` en vez del `'.'`para las casillas vacias, puesto que los valores iniciales para estas casillas puede ser cualquier valor.
+
+```python
+def grid_values(grid):
+    values = []
+    for c in grid:
+        if c == '.':
+            values.append('123456789')
+        elif c in '123456789':
+            values.append(c)
+    return dict(zip(boxes, values))
+ ```
+Ahora esta función convierte el string que recibe de entrada (con 9x9 carácteres) en un diccionario `{<box>: <value>}` que contiene para cada clave (que indica la posiciónc dentro del tablero) su valor correspondiente o '123456789' si está vacio.
+## Segundo paso: Eliminación
+Now, let's finish the code for the function `eliminate()`. The function will iterate over all the boxes in the puzzle that only have one value assigned to them, and it will remove this value from every one of its peers. `eliminate()`, which will take as input a puzzle in dictionary form y retornará un nuevo diccionario con los valores eliminados.
+
+
+
 
 #### PARA MÁS ADELANTE
 Con la misma función `cross('abc', 'def')` vamos a generar todas las columnas, todas las filas y todos los cuadrados de 3x3:
