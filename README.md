@@ -1,5 +1,7 @@
 # Sudoku
 
+Posar aquí el tema de article de Albert Molins a LV i que la gent em preguntava una mica com va això. Doncs comencem amb un exemple senzill. 
+(posar links a article Albert LV)
 Todo el mundo ha visto un Sudoku en la sección de pasatiempos de su revista o periodico. Pero no siempre es fácil, ¿Verdad? Aquí les dejo un programa para que puedan dejar boquiabiertos a sus amigos. 
 
  
@@ -42,7 +44,7 @@ Siguiendo el [post fantástico de Peter Norvig](http://norvig.com/sudoku.html) e
 
 
 
-### Implementación en Python del tablero
+### Implementación del tablero en Python
 First, we'll record rows and columns as strings.
 
 ```
@@ -54,6 +56,11 @@ We'll record the puzzles in two ways — as a `string` and as a `dictionary`.
 * The string will consist of a concatenation of all the readings of the digits in the rows, taking the rows from top to bottom. If the puzzle is not solved, we can use a **.** para indicar que la casilla aun no tiene valor asignado.
 * We'll implement the dictionary as follows. The *keys* will be strings corresponding to the boxes — namely, `'A1', 'A2', ..., 'I9'`. The values will either be the digit in each box (if there is one) or a '.' (if not).
 
+Vamos a empezar programando una función de ayuda `cross(a, b)` que dados dos strings `a` y `b` la función retorna la lista  (recordemos que se especifica con `[` `]`) formada por todas las posibles concatenaciones de letras `s`en el string `a` con la `t` en el string `b`.  
 
+```python
+def cross(a, b):
+      return [s+t for s in a for t in b]
+```
 
-
+Por ejemplo `cross('abc', 'def')` retornar la lista `['ad', 'ae', 'af', 'bd', 'be', 'bf', 'cd', 'ce', 'cf']`.
