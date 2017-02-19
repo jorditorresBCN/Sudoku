@@ -46,18 +46,40 @@ En nuestro código las filas las etiquetaremos con las letras `A`, `B`, `C`, `D`
 
 ### Implementación del tablero en Python
 
+Para facilitar la resolución del problema, vamos a almacenar nuestro tablero en dos formatos: como `string` y como `dictionary`. 
 
-We'll record the puzzles in two ways — as a `string` and as a `dictionary`. The string will consist of a concatenation of all the readings of the digits in the rows, taking the rows from top to bottom. If the puzzle is not solved, we can use a **.** para indicar que la casilla aun no tiene valor asignado. We'll implement the dictionary as follows. The *keys* will be strings corresponding to the boxes — namely, `'A1', 'A2', ..., 'I9'`. The values will either be the digit in each box (if there is one) or a '.' (if not).
+#### String
+The string will consist of a concatenation of all the readings of the digits in the rows, taking the rows from top to bottom. If the puzzle is not solved, we can use a **.** para indicar que la casilla aun no tiene valor asignado. 
+ Por ejemplo el tablero: 
+ ```
+. . 3 |. 2 . |6 . . 
+9 . . |3 . 5 |. . 1 
+. . 1 |8 . 6 |4 . . 
+------+------+------
+. . 8 |1 . 2 |9 . . 
+7 . . |. . . |. . 8 
+. . 6 |7 . 8 |2 . . 
+------+------+------
+. . 2 |6 . 9 |5 . . 
+8 . . |2 . 3 |. . 9 
+. . 5 |. 1 . |3 . . 
+```
+lo almacenaremos con el `string`:
+```
+'..3.2.6..9..3.5..1..18.64....81.29..7.......8..67.82....26.95..8..2.3..9..5.1.3..'
+```
+#### En formato `dictionary`
 
-Para generar nuestra versión de tablero en formato string vamos a empezar programando una función de ayuda `cross(a, b)` que dados dos strings `a` y `b` la función retorna la lista  (recordemos que se especifica con `[` `]`) formada por todas las posibles concatenaciones de letras `s`en el string `a` con la `t` en el string `b`.  
+We'll implement the dictionary as follows. The *keys* will be strings corresponding to the boxes — namely, `'A1', 'A2', ..., 'I9'`. The values will either be the digit in each box (if there is one) or a '.' (if not).
+
+Para generar nuestra estructura de datos que contendrá el tablero vamos a empezar programando una función de soporte que llamaremos `cross(a, b)` que dados dos strings `a` y `b` la función retorna la lista  (recordemos que una lista se especifica con `[` `]`) formada por todas las posibles concatenaciones de letras `s`en el string `a` con la `t` en el string `b`.  
 
 ```python
 def cross(a, b):
       return [s+t for s in a for t in b]
 ```
 
-Por ejemplo `cross('abc', 'def')` retornara la lista `['ad', 'ae', 'af', 'bd', 'be', 'bf', 'cd', 'ce', 'cf']`. Ahora, para crear todas las etiquetas de las casillas podemos hacerlo de la siguiente manera:
-
+Por ejemplo `cross('abc', 'def')` retornara la lista `['ad', 'ae', 'af', 'bd', 'be', 'bf', 'cd', 'ce', 'cf']`. Ahora, para crear todas las etiquetas de las casillas que almacenaremos en `boxes` podemos hacerlo de la siguiente manera:
 
 ```python
 rows = 'ABCDEFGHI'
@@ -70,6 +92,68 @@ Podemos comprobarlo con `print boxes` o `print (boxes)` (dependiendo si usamos P
 [['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9'], ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9'], ['C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9'], ['D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8', 'D9'], ['E1', 'E2', 'E3', 'E4', 'E5', 'E6', 'E7', 'E8', 'E9'], ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9'], ['G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G7', 'G8', 'G9'], ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'H7', 'H8', 'H9'], ['I1', 'I2', 'I3', 'I4', 'I5', 'I6', 'I7', 'I8', 'I9']]
 
 ```
+
+En este punto tenemos en formato string el contenido de nuestro tablero y vamos a pasarlo en formato diccionario de Python usando la notación que hemos decidido anteriormente. Es decir, el string `'..3.2.6..9..3.5..1..18.64....81.29..7.......8..67.82....26.95..8..2.3..9..5.1.3..'` lo queremos tener como:
+
+```
+{
+  'A1': '.'
+  'A2': '.',
+  'A3': '3',
+  'A4': '.',
+  'A5': '2',
+  
+  ...
+  
+  'I9': '.'
+}
+```
+
+Para ello implementamos una nueva función que llamaremos `grid_values()` basada en la librería de Python [`zip`] (https://docs.python.org/3.3/library/functions.html) que nos facilitará esta tarea de repartir este string de entrada que contiene los valores de las casillas (`boxes`):
+
+
+```python
+def grid_values(grid):
+    return dict(zip(boxes, grid))
+```
+Recordemos que el string de entrada a la función que representa el tablero de nuestro sudoku debe ser de 81 carácteres (9x9) compuesto de dígitos `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, o bien de `.` si aun no lo sabemos. Veamos un ejemplo, pero previamente nos dotamos de una función para visualizar más facilmente nuestro tablero de sudoku:
+
+```python
+def display(values):
+    """
+    Visualiza nuestro tablero de sudoku
+    """
+    width = 1+max(len(values[s]) for s in boxes)
+    line = '+'.join(['-'*(width*3)]*3)
+    for r in rows:
+        print(''.join(values[r+c].center(width)+('|' if c in '36' else '')
+                      for c in cols))
+        if r in 'CF': print(line)
+    return
+```
+Con esta función podemos visualizar  el tablero en el formato que estamos acostumbrados. Aplicando esta función a nuestro ejemplo anterior:
+
+```python
+example='483.2.6..9..3.5..1..18.64....81.29..7.......8..67.82....26.95..8..2.3..9..5.1.382'
+display(grid_values(example))
+```
+el resultado de `display` será:
+```
+. . 3 |. 2 . |6 . . 
+9 . . |3 . 5 |. . 1 
+. . 1 |8 . 6 |4 . . 
+------+------+------
+. . 8 |1 . 2 |9 . . 
+7 . . |. . . |. . 8 
+. . 6 |7 . 8 |2 . . 
+------+------+------
+. . 2 |6 . 9 |5 . . 
+8 . . |2 . 3 |. . 9 
+. . 5 |. 1 . |3 . . 
+```
+
+
+#### PARA MÁS ADELANTE
 Con la misma función `cross('abc', 'def')` vamos a generar todas las columnas, todas las filas y todos los cuadrados de 3x3:
 
 ```python
@@ -92,7 +176,7 @@ print (square_units)
 [['A1', 'A2', 'A3', 'B1', 'B2', 'B3', 'C1', 'C2', 'C3'], ['A4', 'A5', 'A6', 'B4', 'B5', 'B6', 'C4', 'C5', 'C6'], ['A7', 'A8', 'A9', 'B7', 'B8', 'B9', 'C7', 'C8', 'C9'], ['D1', 'D2', 'D3', 'E1', 'E2', 'E3', 'F1', 'F2', 'F3'], ['D4', 'D5', 'D6', 'E4', 'E5', 'E6', 'F4', 'F5', 'F6'], ['D7', 'D8', 'D9', 'E7', 'E8', 'E9', 'F7', 'F8', 'F9'], ['G1', 'G2', 'G3', 'H1', 'H2', 'H3', 'I1', 'I2', 'I3'], ['G4', 'G5', 'G6', 'H4', 'H5', 'H6', 'I4', 'I5', 'I6'], ['G7', 'G8', 'G9', 'H7', 'H8', 'H9', 'I7', 'I8', 'I9']]
 ```
 
-Finalmente lo juntamos todo en una sola lista:
+Para poderlo usar posteriormente juntamos todo en una sola lista:
 
 ```python
 
@@ -101,47 +185,6 @@ print (unitlist)
 [['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9'], ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9'], ['C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9'], ['D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8', 'D9'], ['E1', 'E2', 'E3', 'E4', 'E5', 'E6', 'E7', 'E8', 'E9'], ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9'], ['G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G7', 'G8', 'G9'], ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'H7', 'H8', 'H9'], ['I1', 'I2', 'I3', 'I4', 'I5', 'I6', 'I7', 'I8', 'I9'], ['A1', 'B1', 'C1', 'D1', 'E1', 'F1', 'G1', 'H1', 'I1'], ['A2', 'B2', 'C2', 'D2', 'E2', 'F2', 'G2', 'H2', 'I2'], ['A3', 'B3', 'C3', 'D3', 'E3', 'F3', 'G3', 'H3', 'I3'], ['A4', 'B4', 'C4', 'D4', 'E4', 'F4', 'G4', 'H4', 'I4'], ['A5', 'B5', 'C5', 'D5', 'E5', 'F5', 'G5', 'H5', 'I5'], ['A6', 'B6', 'C6', 'D6', 'E6', 'F6', 'G6', 'H6', 'I6'], ['A7', 'B7', 'C7', 'D7', 'E7', 'F7', 'G7', 'H7', 'I7'], ['A8', 'B8', 'C8', 'D8', 'E8', 'F8', 'G8', 'H8', 'I8'], ['A9', 'B9', 'C9', 'D9', 'E9', 'F9', 'G9', 'H9', 'I9'], ['A1', 'A2', 'A3', 'B1', 'B2', 'B3', 'C1', 'C2', 'C3'], ['A4', 'A5', 'A6', 'B4', 'B5', 'B6', 'C4', 'C5', 'C6'], ['A7', 'A8', 'A9', 'B7', 'B8', 'B9', 'C7', 'C8', 'C9'], ['D1', 'D2', 'D3', 'E1', 'E2', 'E3', 'F1', 'F2', 'F3'], ['D4', 'D5', 'D6', 'E4', 'E5', 'E6', 'F4', 'F5', 'F6'], ['D7', 'D8', 'D9', 'E7', 'E8', 'E9', 'F7', 'F8', 'F9'], ['G1', 'G2', 'G3', 'H1', 'H2', 'H3', 'I1', 'I2', 'I3'], ['G4', 'G5', 'G6', 'H4', 'H5', 'H6', 'I4', 'I5', 'I6'], ['G7', 'G8', 'G9', 'H7', 'H8', 'H9', 'I7', 'I8', 'I9']]
 ```
 
-En este punto tenemos en formato string toda la información que requeriremos para solucionar nuestro problema ahora vamos a pasarlo en formato diccionario de Python. Para ello empezaremos implementando una nueva función que llamaremos `grid_values()` y que usa la librería de Python [`zip`] (https://docs.python.org/3.3/library/functions.html):
-
-
-```python
-def grid_values(grid):
-    return dict(zip(boxes, grid))
-```
-Recordemos que el string de entrada a la función que representa el tablero de nuestro sudoku debe ser de 81 carácteres (9x9) compuesto de dígitos `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, o bien de `.`. Veamos un ejemplo. Pero previamente nos dotamos de una función para visualizar más facilmente nuestro tablero de sudoku:
-
-```python
-def display(values):
-    """
-    Visualiza nuestro tablero de sudoku
-    """
-    width = 1+max(len(values[s]) for s in boxes)
-    line = '+'.join(['-'*(width*3)]*3)
-    for r in rows:
-        print(''.join(values[r+c].center(width)+('|' if c in '36' else '')
-                      for c in cols))
-        if r in 'CF': print(line)
-    return
-```
-
-```python
-example='483.2.6..9..3.5..1..18.64....81.29..7.......8..67.82....26.95..8..2.3..9..5.1.382'
-display(grid_values(example))
-```
-el resultado será:
-```
-4 8 3 |. 2 . |6 . . 
-9 . . |3 . 5 |. . 1 
-. . 1 |8 . 6 |4 . . 
-------+------+------
-. . 8 |1 . 2 |9 . . 
-7 . . |. . . |. . 8 
-. . 6 |7 . 8 |2 . . 
-------+------+------
-. . 2 |6 . 9 |5 . . 
-8 . . |2 . 3 |. . 9 
-. . 5 |. 1 . |3 8 2 
-```
 
 ### Agradecimientos
 
