@@ -152,7 +152,11 @@ el resultado de `display` será:
 . . 5 |. 1 . |3 . . 
 ```
 
-## Primer paso: Eliminación
+## Primera técnica: Eliminación
+
+se trata de eliminar posibilidades de los peers. AFEGIR DIBUIX DE SUDOKU ELIMINATION
+
+
 
 Como primer paso en nuestra estratégia usaremos lo que llamamos **eliminación**. Empezaremos mirando una casilla y analizando que valores pueden ir allí. Por ejemplo en la posición E6, marcado con una X en el siguiente tablero:
 ```
@@ -237,7 +241,13 @@ def eliminate(values):
 
 # Strategy 2: Only Choice
 ARA VAIG PER AQUÍ no he continuat per tenir més temps
+si només hi ha una posibilitat, posar-la en la box
+
+AFEGIR DIBUIX: dibuixSudokuOnlyChoice 
 # Constraint Propagation
+DIBUIX: before constraint propagation
+
+UN COP fetes les dues estratègies anteriors ara el que podem fer es 
 
 
 ### Agradecimientos
