@@ -237,6 +237,7 @@ def eliminate(values):
 
 # Strategy 2: Only Choice
 ARA VAIG PER AQUÍ no he continuat per tenir més temps
+# Constraint Propagation
 
 
 ### Agradecimientos
