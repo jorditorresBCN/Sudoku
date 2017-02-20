@@ -245,9 +245,26 @@ si només hi ha una posibilitat, posar-la en la box
 
 AFEGIR DIBUIX: dibuixSudokuOnlyChoice 
 # Constraint Propagation
-DIBUIX: before constraint propagation
+DIBUIX: ConstraintPropagation
+Now that you see how we apply Constraint Propagation to this problem, let's try to code it! In the following quiz, combine the functions eliminate and only_choice to write the function reduce_puzzle, which receives as input an unsolved puzzle and applies our two constraints repeatedly in an attempt to solve it.
 
-UN COP fetes les dues estratègies anteriors ara el que podem fer es 
+Some things to watch out for:
+
+* The function needs to stop if the puzzle gets solved. How to do this?
+* What if the function doesn't solve the sudoku? Can we make sure the function quits when applying the two strategies stops making progress?
+
+Posar aquí el codi aquell de punt 7 del temari i tal. 
+i dir que sembla que ha funcionat.
+
+## Estratégia 3: Search
+ que pasa si tenemos un sudoku  que no sabemos solucionar tan facilmente? Vamos a tratar otra We're now going to use another foundational AI technique to help us solve this problem: Search.
+ 
+La idea: Here's how we'll apply it. The box 'A2' has four possibilities: 1, 6, 7, and 9. Why don't we fill it in with a 1 and try to solve our puzzle. If we can't solve it, we'll try with a 6, then with a 7, and then with a 9. Sure, it's four times as much work, but each one of the cases becomes easier.
+
+mirar el video que puc treure dibuix esquematic per explicar l'exemple.
+
+aquí posar el DFS 
+Search is used throughout AI from Game-Playing to Route Planning to efficiently find solutions.
 
 
 ### Agradecimientos
