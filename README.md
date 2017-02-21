@@ -10,10 +10,15 @@ Hace unos días el periodista [Albert Molins publicaba en La Vanguardia](http://
 
 * Go: Google compró la empresa DeepMind en el 2014, que fue la encargada de desarrollar Alpha Go, el algoritmo pensado para jugar al Go. La víctima fue el campeón del mundo de este juego. AlphaGo y Lee Se-dol se enfrentaron a partir del 8 de marzo del 2016 durante 5 partidas. La máquina ganó las tres primeras y todo quedó decidido. Se-dol sólo ganó la última, cuando un movimiento inusual desconcertó a la máquina, poco entrenada a lidiar con las sorpresas.
 
-A raíz de este artículo algunos me han preguntado si podria explicar un poco más a nivel técnico como funciona por dentro estos sistemas supuestamente inteligentes. En realidad son sistemas complejos, que requieren además mucha computación y no estan al alcance de cualquiera.  Pero se me ocurre compartir un ejemplo de como seria el código de un programa que usa técnicas de inteligencia artificial que permite resolver un Sudoku. Creo que es un buen ejemplo de juego compuesto por una cuadrícula de 9x9 casillas, dividida en regiones de 3x3 casillas, con reglas simples que todos conocemos:
+A raíz de este artículo algunos me han preguntado si podria explicar un poco más a nivel técnico como funciona por dentro estos sistemas supuestamente inteligentes. En realidad son sistemas complejos, que requieren además mucha computación y no estan al alcance de cualquiera, pero no dejan de ser algoritmos escritos en un lenguaje de programación que un ingeniero informático sin ninguna duda puede entender.  
+
+Por ello, me he decidido escribir este breve post para explicar como puede ser el código de un programa que usa técnicas de inteligencia artificial para resolver un juego como puede ser un Sudoku. Lo he elegido por ser un juego del que la mayoria conocemos, una cuadrícula de 9x9 casillas, dividida en regiones de 3x3 casillas, con reglas simples que todos conocemos:
 
 * If a box has a value, then all the boxes in the same row, same column, or same 3x3 square cannot have that same value.
 * If there is only one allowed value for a given box in a row, column, or 3x3 square, then the box is assigned that value.
+
+Pero no por tener reglas simples implica que sea simple su resolución y aun menos rápida. Este agente "inteligente" que les propongo siempre resuelve más rápido que el lector (suponiendo que el lecctor pueda resolverlo). 
+
 
 ## Algoritmo
 
