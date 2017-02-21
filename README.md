@@ -1,6 +1,6 @@
 # Sudoku
 
-Hace unos días el periodista Albert Molins publicaba en La Vanguardia un excelente artículo titulado “Una máquina gana al póquer a los mejores jugadores del mundo” para el que me llamo para contrastar algunos datos sobre este sistema de inteligencia artificial Libratus desarrollado por la Universidad Carnegie Mellon. En el mismo artículo Albert se hacia eco de anteriores duelos entre sistemas de inteligencia artificial y humanos en diferentes juegos: 
+Hace unos días el periodista [Albert Molins publicaba en La Vanguardia](http://jorditorres.org/inteligencia-artificial-y-poquer/) un excelente artículo titulado “Una máquina gana al póquer a los mejores jugadores del mundo” para el que me llamo para contrastar algunos datos sobre este sistema de inteligencia artificial Libratus desarrollado por la Universidad Carnegie Mellon. En el mismo artículo Albert se hacia eco de anteriores duelos entre sistemas de inteligencia artificial y humanos en diferentes juegos: 
 
 * Ajedrez: El superordenador Deep Blue fue la primera incursión de IBM en la inteligencia artificial. Se desarrolló para jugar al ajedrez. En febrero de 1996 se enfrentó al campeón del mundo Gary Kaspárov. Ganó la primera partida, pero Kaspárov terminó derrotándolo por 42. En mayo de 1997 tuvo lugar la revancha. IBM tenía una versión mejorada que se llamaba Deeper Blue, que esta vez derrotó a Kaspárov por 3 1/2 a 2 1/2.
 
