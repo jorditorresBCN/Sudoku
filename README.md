@@ -10,24 +10,27 @@ Hace unos días el periodista [Albert Molins publicaba en La Vanguardia](http://
 
 * Go: Google compró la empresa DeepMind en el 2014, que fue la encargada de desarrollar Alpha Go, el algoritmo pensado para jugar al Go. La víctima fue el campeón del mundo de este juego. AlphaGo y Lee Se-dol se enfrentaron a partir del 8 de marzo del 2016 durante 5 partidas. La máquina ganó las tres primeras y todo quedó decidido. Se-dol sólo ganó la última, cuando un movimiento inusual desconcertó a la máquina, poco entrenada a lidiar con las sorpresas.
 
-A raíz de este artículo algunos me han preguntado si podria explicar un poco más a nivel técnico como funciona por dentro estos sistemas supuestamente inteligentes. En realidad son sistemas complejos, que requieren además mucha computación y no estan al alcance de cualquiera, pero no dejan de ser algoritmos escritos en un lenguaje de programación que un ingeniero informático sin ninguna duda puede entender.  
+A raíz de este artículo algunos me han preguntado si podria explicar un poco más a nivel técnico como funciona por dentro estos sistemas supuestamente inteligentes. En realidad son sistemas complejos, que requieren además mucha computación y no estan al alcance de cualquiera, pero no dejan de ser algoritmos escritos en un lenguaje de programación que un ingeniero informático sin ninguna duda puede programar, por supuesto los que formamos en Barcelona ;-).  
 
-Por ello, me he decidido escribir este breve post para explicar como puede ser el código de un programa que usa técnicas de inteligencia artificial para resolver un juego como puede ser un Sudoku. Lo he elegido por ser un juego del que la mayoria conocemos, una cuadrícula de 9x9 casillas, dividida en regiones de 3x3 casillas, con reglas simples que todos conocemos:
+Por ello, me he decidido escribir este breve post para explicar como puede ser el código de un programa que usa técnicas de inteligencia artificial para resolver un juego como puede ser un _Sudoku_. Lo he elegido por ser un juego que se basa en técnicas parecidas a las que usan los anteriores juegos mencionados, la mayoria de nosotros sabemos que se trata de una cuadrícula de 9x9 casillas dividida en regiones de 3x3 casillas, con reglas simples que todos conocemos:
 
 * If a box has a value, then all the boxes in the same row, same column, or same 3x3 square cannot have that same value.
 * If there is only one allowed value for a given box in a row, column, or 3x3 square, then the box is assigned that value.
 
-Pero no por tener reglas simples implica que sea simple su resolución y aun menos rápida. Este agente "inteligente" que les propongo siempre resuelve más rápido que el lector (suponiendo que el lecctor pueda resolverlo). 
+Pero no se hagan ilusiones, no por tener reglas simples implica que sea simple su resolución y aun menos rápida. Este agente "inteligente" que les propongo **siempre** va a resolver más rápido que usted cualquier Sudoku, suponiendo que usted lo pueda resolverlo :-). 
 
 
-## Algoritmo
+## Algoritmo en Python
 
-### Introducción
+### Basado en técnicas de Inteligencia Artificial
 Se trata de un simble algoritmo en Python que usa dos técnicas básicas de Inteligencia Artificial:
 * **Constraint Propagation**: When trying to solve a problem, you'll find that there are some local constraints to each square. These constraints help you narrow the possibilities for the answer, which can be very helpful. We will learn to extract the maximum information out of these constraints in order to get closer to our solution. Additionally, you'll see how we can repeatedly apply simple constraints to iteratively narrow the search space of possible solutions. Constraint propagation can be used to solve a variety of problems such as calendar scheduling, and cryptographic puzzles.
 * **Search**: In the process of problem solving, we may get to the point where two or more possibilities are available. What do we do? What if we branch out and consider both of them? Maybe one of them will lead us to a position in which three or more possibilities are available. Then, we can branch out again. At the end, we can create a whole tree of possibilities and find ways to traverse the tree until we find our solution. This is an example of how search can be used.
 
 ### Notación y nomenclatura
+
+#### Etiquetado
+
 En nuestro código las filas las etiquetaremos con las letras `A`, `B`, `C`, `D`, `E`, `F`, `G`, `H`, `I`. Y las columnas con los números `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`. Es decir, las posiciones de nuestro tablero quedarán etiquetadas como:
 
  ```
@@ -51,12 +54,10 @@ En nuestro código las filas las etiquetaremos con las letras `A`, `B`, `C`, `D`
 * For a particular box (such as 'A1'), sus pares ( `peers`)  will be all other boxes that belong to a common unit (namely, those that belong to the same row, column, or 3x3 square). Por tanto para cada casilla, hay 20 pares.  Por ejemplo los pares de 'A1' son :  row: A2, A3, A4, A5, A6, A7, A8, A9 column: B1, C1, D1, E1, F1, G1, H1, I1 3x3 square: B2, B3, C2, C3 (since A1, A2, A3, B1, C1 are already counted).
 
 
+#### La cuadrícula 
 
-### Implementación del tablero en Python
+Para facilitar la resolución del problema, vamos a almacenar nuestro tablero o cuadrícula en dos formatos: como `string` y como `dictionary`. 
 
-Para facilitar la resolución del problema, vamos a almacenar nuestro tablero en dos formatos: como `string` y como `dictionary`. 
-
-#### String
 The string will consist of a concatenation of all the readings of the digits in the rows, taking the rows from top to bottom. If the puzzle is not solved, we can use a **.** para indicar que la casilla aun no tiene valor asignado. 
  Por ejemplo el tablero: 
  ```
@@ -76,9 +77,8 @@ lo almacenaremos con el `string`:
 ```
 '..3.2.6..9..3.5..1..18.64....81.29..7.......8..67.82....26.95..8..2.3..9..5.1.3..'
 ```
-#### En formato `dictionary`
 
-We'll implement the dictionary as follows. The *keys* will be strings corresponding to the boxes — namely, `'A1', 'A2', ..., 'I9'`. The values will either be the digit in each box (if there is one) or a '.' (if not).
+Por otra parte We'll implement the dictionary as follows. The *keys* will be strings corresponding to the boxes — namely, `'A1', 'A2', ..., 'I9'`. The values will either be the digit in each box (if there is one) or a '.' (if not).
 
 Para generar nuestra estructura de datos que contendrá el tablero vamos a empezar programando una función de soporte que llamaremos `cross(a, b)` que dados dos strings `a` y `b` la función retorna la lista  (recordemos que una lista se especifica con `[` `]`) formada por todas las posibles concatenaciones de letras `s`en el string `a` con la `t` en el string `b`.  
 
