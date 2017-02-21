@@ -1,13 +1,16 @@
 # Sudoku
 
-Posar aquí el tema de article de Albert Molins a LV i que la gent em preguntava una mica com va això. Doncs comencem amb un exemple senzill. 
-(posar links a article Albert LV)
-Todo el mundo ha visto un Sudoku en la sección de pasatiempos de su revista o periodico. Pero no siempre es fácil, ¿Verdad? Aquí les dejo un programa para que puedan dejar boquiabiertos a sus amigos. 
+Hace unos días el periodista Albert Molins publicaba en La Vanguardia un excelente artículo titulado “Una máquina gana al póquer a los mejores jugadores del mundo” para el que me llamo para contrastar algunos datos sobre este sistema de inteligencia artificial Libratus desarrollado por la Universidad Carnegie Mellon. En el mismo artículo Albert se hacia eco de anteriores duelos entre sistemas de inteligencia artificial y humanos en diferentes juegos: 
 
- 
-## Estrategia
- 
-Una estratégia para solucionar el sudoky del domingo de La Vanguardia que la mayoría de mis amigos usa consiste en seguir dos pasos:
+* Ajedrez: El superordenador Deep Blue fue la primera incursión de IBM en la inteligencia artificial. Se desarrolló para jugar al ajedrez. En febrero de 1996 se enfrentó al campeón del mundo Gary Kaspárov. Ganó la primera partida, pero Kaspárov terminó derrotándolo por 42. En mayo de 1997 tuvo lugar la revancha. IBM tenía una versión mejorada que se llamaba Deeper Blue, que esta vez derrotó a Kaspárov por 3 1/2 a 2 1/2.
+
+* Jeopardy: Este concurso de preguntas y respuestas de la televisión estadounidense fue el elegido por IBM para poner a prueba su sistema de inteligencia artificial Watson, capaz de responder preguntas con lenguaje natural. Durante tres días, en febrero del 2011, se enfrentó y derrotó a Brad Ruttler y Ken Jennings, los dos mejores concursantes del programa. De todas formas, Watson no contestó correctamente todas las preguntas y en algunas necesitó ayuda.
+
+* Póquer: El mismo equipo responsable de Libratus también lo fue de Claudico, que entre abril y mayo del 2015 se enfrentó a 4 jugadores profesionales de póquer. En esa ocasión se jugaron 80.000 manos de la misma versión del juego de cartas que ha jugado Libratus. De todos modos el resultado fue muy distinto y Claudico salió derrotado al perder fichas, en conjunto, por valor de 732.713 dólares. Claudico sólo fue capaz de ganar a uno de los cuatro jugadores.
+
+* Go: Google compró la empresa DeepMind en el 2014, que fue la encargada de desarrollar Alpha Go, el algoritmo pensado para jugar al Go. La víctima fue el campeón del mundo de este juego. AlphaGo y Lee Se-dol se enfrentaron a partir del 8 de marzo del 2016 durante 5 partidas. La máquina ganó las tres primeras y todo quedó decidido. Se-dol sólo ganó la última, cuando un movimiento inusual desconcertó a la máquina, poco entrenada a lidiar con las sorpresas.
+
+A raíz de este artículo algunos me han preguntado si podria explicar un poco más a nivel técnico como funciona por dentro estos sistemas supuestamente inteligentes. En realidad son sistemas complejos, que requieren además mucha computación y no estan al alcance de cualquiera.  Pero se me ocurre compartir un ejemplo de como seria el código de un programa que usa técnicas de inteligencia artificial que permite resolver un Sudoku. Creo que es un buen ejemplo de juego compuesto por una cuadrícula de 9x9 casillas, dividida en regiones de 3x3 casillas, con reglas simples que todos conocemos:
 
 * If a box has a value, then all the boxes in the same row, same column, or same 3x3 square cannot have that same value.
 * If there is only one allowed value for a given box in a row, column, or 3x3 square, then the box is assigned that value.
