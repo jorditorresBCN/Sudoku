@@ -271,6 +271,9 @@ aquí posar el DFS
 Search is used throughout AI from Game-Playing to Route Planning to efficiently find solutions.
 
 
+
+## dir que hi ha més tècniques 
+
 ### Agradecimientos
 
-Para este ejercicio nos hemos inspirado en el [post fantástico de Peter Norvig](http://norvig.com/sudoku.html) y parte de los ejercicios del nanodregree de AI de Udacity). 
+Para este ejercicio nos hemos inspirado en el [post fantástico de Peter Norvig](http://norvig.com/sudoku.html) y parte del nanodregree de AI de Udacity . 
