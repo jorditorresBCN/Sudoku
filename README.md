@@ -478,19 +478,48 @@ def search(values):
             return attempt
 ```
 
+```python
+def solve(grid):
+    # Create a dictionary of values from the grid
+    values = grid_values(grid)
+    return search(values)
+```
+Veamos ahora si se puede resolver nuestro anterior ejemplo:
+```python
+example='2.............62....1....7......8...3...9...7...6..4...4....8....52.............3'
+display(grid_values_original(example))
+display(solve(example))
+```
 
+```
+2 . . |. . . |. . . 
+. . . |. . 6 |2 . . 
+. . 1 |. . . |. 7 . 
+------+------+------
+. . . |. . 8 |. . . 
+3 . . |. 9 . |. . 7 
+. . . |6 . . |4 . . 
+------+------+------
+. 4 . |. . . |8 . . 
+. . 5 |2 . . |. . . 
+. . . |. . . |. . 3 
 
-Why don't we fill it in with a 1 and try to solve our puzzle. If we can't solve it, we'll try with a 6, then with a 7, and then with a 9. Sure, it's four times as much work, but each one of the cases becomes easier.
+2 9 6 |3 4 7 |1 5 8 
+5 3 7 |8 1 6 |2 4 9 
+4 8 1 |9 2 5 |3 7 6 
+------+------+------
+1 5 9 |4 7 8 |6 3 2 
+3 6 4 |1 9 2 |5 8 7 
+7 2 8 |6 5 3 |4 9 1 
+------+------+------
+9 4 3 |7 6 1 |8 2 5 
+8 1 5 |2 3 9 |7 6 4 
+6 7 2 |5 8 4 |9 1 3 
 
+```
 
-
-aquí posar el DFS 
-Search is used throughout AI from Game-Playing to Route Planning to efficiently find solutions.
-
-
-
-## dir que hi ha més tècniques 
+## Y para acabar
+En este post he querido mostrar con la excusa de resolver un _Sudoku_  como es un algoritmo que usa técnicas simples de inteligencia artificial. Ahora bien, debo enfatizar que en realidad los problemas como el Ajedrez, GO o Poker, mencionados anteriormente, tienen una complejidad tal que aplicar tal qual el algoritmo `search()`presentado aquí es imposible, pues tardariamos decenios a computar la solución (el *Sudoky* a pesar de todo tiene muy pocas combinaciones para explorar). En estos casos existen un gran número de técnicas que si el lector le interesa profundizar un poco más le recomiendo el libro [Artificial Intelligence, a modern approach](https://en.wikipedia.org/wiki/Artificial_Intelligence:_A_Modern_Approach) que solo contiene 1132 páginas. 
 
 ### Agradecimientos
-
-Para este ejercicio nos hemos inspirado en el [post fantástico de Peter Norvig](http://norvig.com/sudoku.html) y parte del nanodregree de AI de Udacity . 
+Para este ejercicio nos hemos inspirado en el [post fantástico de Peter Norvig](http://norvig.com/sudoku.html) y parte del programa de [Artificial Intelligence de Udacity](https://www.udacity.com). 
