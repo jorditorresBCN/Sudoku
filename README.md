@@ -1,5 +1,4 @@
-# Introducción a la Inteligencia Artificial al alcance de todos con un ejemplo: Sudoku
-
+# Algoritmo para resolver un Sudoku
 Hace unos días el periodista [Albert Molins publicaba en La Vanguardia](http://jorditorres.org/inteligencia-artificial-y-poquer/) un excelente artículo titulado “Una máquina gana al póquer a los mejores jugadores del mundo” para el que me llamo para contrastar algunos datos sobre este sistema de inteligencia artificial, Libratus, desarrollado por la Universidad Carnegie Mellon. En el mismo artículo Albert se hacia eco de anteriores duelos entre sistemas de inteligencia artificial y humanos en diferentes juegos como el Ajedrez (en 1997 el ordenador Deeper Blue derrotó a Kaspárov), concurso de preguntas y respuestas de la televisión estadounidense (en 2011 el ordenador Watson ganó a Brad Ruttler y Ken Jennings, los dos mejores concursantes del concurso Jeopardy) o el Go (en el 2016 el sistema AlphaGo desarrollado por la empresa DeepMind de Google ganó a Lee Se-dol, campeón mundial de Go).
 
 A raíz de este artículo algunos me han preguntado si podria explicar un poco más a nivel técnico como funciona por dentro estos sistemas supuestamente inteligentes. En realidad son sistemas complejos, que requieren además mucha computación y no estan al alcance de cualquiera. Pero es cierto que no dejan de ser algoritmos que un ingeniero informático sin ninguna duda puede entender y me atreveria a decir, que programar. 
@@ -156,7 +155,7 @@ el resultado de `display` será:
 . . 5 |. 1 . |3 . . 
 ```
 
-## Eliminación de opciones
+## Eliminación de opciones en una casilla
 
 ### Descripción
 Como primer paso en nuestra estratégia usaremos lo que llamamos **eliminación** que trata de eliminar posibilidades de los pares.
@@ -304,41 +303,186 @@ display(eliminate(grid_values(example)))
    6     4679    5   |   4      1      47  |   3      8      2   
 ```
 
+## Casillas con una sola opción
+Ahora estamos en la situación de que nos encontramos en un punto donde hemos marcado casillas que en teoría pueden contener varias opciones pero que dados sus pares solo puede ser una de ellas.  Para ello, vamos a ir a través de todas las `units` y en el caso de que encontremos una `unit` con un valor que solo encaja en una casilla, vamos a asignar este valor en dicha casilla. Por ejemplo, en nuestro ejemplo, el primer cuadrado 3x3 tiene los siguientes valores:
 
-xxxxx
+```
+---------------------+
+   4      8      3   |  
+   9     267     7   |   
+   25    257     1   |  
+---------------------+
+```
+Si miramos la casilla `B2` vemos que puede contener tres valores: `2`,`6` o `7`. Pero resulta que el `6` solo puede aparecer en esta casilla, por ello ja le asignamos este valor a la casilla eliminando opciones en realidad.
 
-### Basado en técnicas de Inteligencia Artificial
-Se trata de un simble algoritmo en Python que usa dos técnicas básicas de Inteligencia Artificial:
-* **Constraint Propagation**: Al intentar resolver un problema, verá que hay algunas limitaciones locales para cada cuadrado. Estas limitaciones ayudan a reducir las posibilidades de la respuesta, que puede ser muy útil. Aprenderemos a extraer la máxima información de estas restricciones para acercarnos a nuestra solución. Además, verá cómo podemos aplicar repetidamente restricciones simples para reducir iterativamente el espacio de búsqueda de posibles soluciones. 
-
-* **Search**: En el proceso de resolución de problemas, a menudo llegamos al punto en que existen varias posibilidades. Una forma de atacar el problema es crear un árbol completo de posibilidades y encontrar formas de recorrer el árbol hasta encontrar nuestra solución.
-
-
-xxxxxx
-
-# Strategy 2: Only Choice
-ARA VAIG PER AQUÍ no he continuat per tenir més temps
-si només hi ha una posibilitat, posar-la en la box
-
-AFEGIR DIBUIX: dibuixSudokuOnlyChoice 
-# Constraint Propagation
-DIBUIX: ConstraintPropagation
-Now that you see how we apply Constraint Propagation to this problem, let's try to code it! In the following quiz, combine the functions eliminate and only_choice to write the function reduce_puzzle, which receives as input an unsolved puzzle and applies our two constraints repeatedly in an attempt to solve it.
-
-Some things to watch out for:
-
-* The function needs to stop if the puzzle gets solved. How to do this?
-* What if the function doesn't solve the sudoku? Can we make sure the function quits when applying the two strategies stops making progress?
-
-Posar aquí el codi aquell de punt 7 del temari i tal. 
-i dir que sembla que ha funcionat.
-
-## Estratégia 3: Search
- que pasa si tenemos un sudoku  que no sabemos solucionar tan facilmente? Vamos a tratar otra We're now going to use another foundational AI technique to help us solve this problem: Search.
+```python
+display(example_after_eliminate)
+example_after_only_choice=only_choice(example_after_eliminate)
+print (" "), print (" "), print (" ")
+display(example_after_only_choice)
+```
+```
+   4      8      3   |   9      2      17  |   6     579     57  
+   9     267     7   |   3      47     5   |   78     27     1   
+   25    257     1   |   8      79     6   |   4    23579   357  
+---------------------+---------------------+---------------------
+   35    345     8   |   1     3456    2   |   9    34567  34567 
+   7    123459   49  |  459   34569    4   |   1    13456    8   
+  135   13459    6   |   7     3459    8   |   2     1345   345  
+---------------------+---------------------+---------------------
+   13    1347    2   |   6     478     9   |   5     147     47  
+   8     1467    47  |   2     457     3   |   17    1467    9   
+   6     4679    5   |   4      1      47  |   3      8      2   
  
-La idea: Here's how we'll apply it. The box 'A2' has four possibilities: 1, 6, 7, and 9. Why don't we fill it in with a 1 and try to solve our puzzle. If we can't solve it, we'll try with a 6, then with a 7, and then with a 9. Sure, it's four times as much work, but each one of the cases becomes easier.
+ 
+ 
+  4     8     3   |  9     2     1   |  6    579    57  
+  9     6     7   |  3     4     5   |  8     27    1   
+  2     5     1   |  8     7     6   |  4   23579  357  
+------------------+------------------+------------------
+  35   345    8   |  1    3456   2   |  9     7     6   
+  7     2     9   |  5   34569   4   |  1   13456   8   
+ 135  13459   6   |  7    3459   8   |  2    1345  345  
+------------------+------------------+------------------
+  13   1347   2   |  6     8     9   |  5    147    47  
+  8    1467   47  |  2     5     3   |  7     6     9   
+  6     9     5   |  4     1     7   |  3     8     2   
 
-mirar el video que puc treure dibuix esquematic per explicar l'exemple.
+```
+
+## Propagación de restricciones
+Después de analizar estas dos estratégias para encontrar limitaciones locales que nos permiten encontrar valores a las casillas, lo que intuitivamente se nos ocurre es combinarlas iterativamente para ir resolviendo el *sudoku*, donde en cada iteración, los nuevos valores resueltos nos dan la solución para otras casillas. Por tanto, el código que nos queda podría ser:
+
+```python
+def reduce_puzzle(values):
+    stalled = False
+    while not stalled:
+        # Check how many boxes have a determined value
+        solved_values_before = len([box for box in values.keys() if len(values[box]) == 1])
+
+        # se the Eliminate Strategy
+        values = eliminate(values)
+
+        # Use the Only Choice Strategy
+        values = only_choice(values)
+
+        # Check how many boxes have a determined value, to compare
+        solved_values_after = len([box for box in values.keys() if len(values[box]) == 1])
+        # If no new values were added, stop the loop.
+        stalled = solved_values_before == solved_values_after
+        # Sanity check, return False if there is a box with zero available values:
+        if len([box for box in values.keys() if len(values[box]) == 0]):
+            return False
+    return values
+```
+En este código tenemos en cuenta cuando debemos parar, con la condición de `stalled = solved_values_before == solved_values_after`, bque nos indica cuando en una nueva iteración no se ha podido resolver ninguna nueva casilla. En el caso que retorna `false`porque en una casilla no contenga ningún valor posible lo veremos en el siguiente apartado.
+
+
+Si retomamos el ejemplo inicial vemos que con estas dos simples estratégias podemos solucionar el *sudoku*:
+
+```python
+example='..3.2.6..9..3.5..1..18.64....81.29..7.......8..67.82....26.95..8..2.3..9..5.1.3..'
+display(grid_values_original(example))
+display(reduce_puzzle(grid_values(example)))
+```
+
+```
+. . 3 |. 2 . |6 . . 
+9 . . |3 . 5 |. . 1 
+. . 1 |8 . 6 |4 . . 
+------+------+------
+. . 8 |1 . 2 |9 . . 
+7 . . |. . . |. . 8 
+. . 6 |7 . 8 |2 . . 
+------+------+------
+. . 2 |6 . 9 |5 . . 
+8 . . |2 . 3 |. . 9 
+. . 5 |. 1 . |3 . . 
+ 
+ 
+ 
+4 8 3 |9 2 1 |6 5 7 
+9 6 7 |3 4 5 |8 2 1 
+2 5 1 |8 7 6 |4 9 3 
+------+------+------
+5 4 8 |1 3 2 |9 7 6 
+7 2 9 |5 6 4 |1 3 8 
+1 3 6 |7 9 8 |2 4 5 
+------+------+------
+3 7 2 |6 8 9 |5 1 4 
+8 1 4 |2 5 3 |7 6 9 
+6 9 5 |4 1 7 |3 8 2 
+```
+
+## Estategia `Search`
+
+¿Pero estamos seguros que únicamente con las dos anteriores estratégias tenemos suficiente para resolver cualquier _sudoku_? Veamos el siguiente ejemplo:
+
+
+```python
+example='2.............62....1....7......8...3...9...7...6..4...4....8....52.............3'
+display(grid_values_original(example))
+display(reduce_sudoku(grid_values(example)))
+```
+
+```
+2 . . |. . . |. . . 
+. . . |. . 6 |2 . . 
+. . 1 |. . . |. 7 . 
+------+------+------
+. . . |. . 8 |. . . 
+3 . . |. 9 . |. . 7 
+. . . |6 . . |4 . . 
+------+------+------
+. 4 . |. . . |8 . . 
+. . 5 |2 . . |. . . 
+. . . |. . . |. . 3 
+
+   2     356789  346789 |1345789  134578  134579 | 13569  1345689  145689 
+ 45789   35789   34789  |1345789  134578    6    |   2     134589  14589  
+ 45689   35689     1    | 34589   23458   23459  |  3569     7     45689  
+------------------------+------------------------+------------------------
+ 145679  125679  24679  | 13457   123457    8    | 13569   123569  12569  
+   3     12568    2468  |  145      9      1245  |  156    12568     7    
+ 15789   125789   2789  |   6     12357   12357  |   4     123589  12589  
+------------------------+------------------------+------------------------
+  1679     4     23679  | 13579   13567   13579  |   8     12569   12569  
+ 16789   136789    5    |   2     134678  13479  |  1679    1469    1469  
+ 16789   126789  26789  | 145789  145678  14579  | 15679   124569    3    
+```
+
+¿Que pasa si tenemos un sudoku  que no sabemos solucionar tan facilmente? Vamos a presentar otra técnica básica del mundo de la Inteligencia Artificial para solucionar este problema. Se conoce por `Search`. No entraremos en detalle, però la idea es que en el proceso de resolución de problemas, a menudo llegamos al punto en que existen varias posibilidades. Una forma de atacar el problema es crear un árbol completo de posibilidades y encontrar formas de recorrer el árbol hasta encontrar nuestra solución. 
+ 
+Por ejemplo, la casilla `A2` tiene 5 posibilidades: `4`, `5`, `7`, `8` y `9`. Lo que hacemos es considerar que contiene un `4` y resolver el *Sudoku*. Si no lo podemos resolver (nos vendrá indicado por el retorno de `false` en la función `reduce_puzzle()` probamos con el siguiente, el `5`, y así sucesivamente. Evidentemente es 5 veces más trabajo, pero es la manera de conseguir todas las opciones.
+
+El código que realiza recursivamente esta iteración por todas las opciones es:
+
+```python
+def search(values):
+    values = reduce_puzzle(values)
+    if values is False:
+        return False ## Failed earlier
+    if all(len(values[s]) == 1 for s in boxes): 
+        return values ## Solved!
+    
+    # Choose one of the unfilled squares with the fewest possibilities
+    unfilled_squares= [(len(values[s]), s) for s in boxes if len(values[s]) > 1]
+    n,s = min(unfilled_squares)
+    
+    # recurrence to solve each one of the resulting sudokus
+    for value in values[s]:
+        nova_sudoku = values.copy()
+        nova_sudoku[s] = value
+        attempt = search(nova_sudoku)
+        if attempt:
+            return attempt
+```
+
+
+
+Why don't we fill it in with a 1 and try to solve our puzzle. If we can't solve it, we'll try with a 6, then with a 7, and then with a 9. Sure, it's four times as much work, but each one of the cases becomes easier.
+
+
 
 aquí posar el DFS 
 Search is used throughout AI from Game-Playing to Route Planning to efficiently find solutions.
