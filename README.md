@@ -80,9 +80,9 @@ lo almacenaremos con el `string`:
 '..3.2.6..9..3.5..1..18.64....81.29..7.......8..67.82....26.95..8..2.3..9..5.1.3..'
 ```
 
-Por otra parte We'll implement the dictionary as follows. The *keys* will be strings corresponding to the boxes — namely, `'A1', 'A2', ..., 'I9'`. The values will either be the digit in each box (if there is one) or a '.' (if not).
+Por otra parte implementemos el diccionario de tal manera que  las *keys* seran los *strings* correspondientes a las casillas (  `'A1', 'A2', ..., 'I9'`) y los valores seran o bien el dígito en la casilla o '.'.
 
-Para generar nuestra estructura de datos que contendrá el tablero vamos a empezar programando una función de soporte que llamaremos `cross(a, b)` que dados dos strings `a` y `b` la función retorna la lista  (recordemos que una lista se especifica con `[` `]`) formada por todas las posibles concatenaciones de letras `s`en el string `a` con la `t` en el string `b`.  
+Para generar nuestra estructura de datos que contendrá el tablero cuadriculado vamos a empezar programando una función de soporte que llamaremos `cross(a, b)` que dados dos strings `a` y `b` la función retorna la lista  (recordemos que una lista se especifica con `[` `]`) formada por todas las posibles concatenaciones de letras `s`en el string `a` con la `t` en el string `b`.  
 
 ```python
 def cross(a, b):
@@ -164,11 +164,11 @@ el resultado de `display` será:
 
 ## Primera técnica: Eliminación
 
-se trata de eliminar posibilidades de los peers. AFEGIR DIBUIX DE SUDOKU ELIMINATION
+Como primer paso en nuestra estratégia usaremos lo que llamamos **eliminación** que trata de eliminar posibilidades de los pares.
 
+AFEGIR DIBUIX DE SUDOKU ELIMINATION
 
-
-Como primer paso en nuestra estratégia usaremos lo que llamamos **eliminación**. Empezaremos mirando una casilla y analizando que valores pueden ir allí. Por ejemplo en la posición E6, marcado con una X en el siguiente tablero:
+Empezaremos mirando una casilla y analizando que valores pueden ir allí. Por ejemplo en la posición E6, marcado con una X en el siguiente tablero:
 ```
 . . 3 |. 2 . |6 . . 
 9 . . |3 . 5 |. . 1 
@@ -184,9 +184,9 @@ Como primer paso en nuestra estratégia usaremos lo que llamamos **eliminación*
 ```
 Vemos de entre los posibles valores `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9` no todos son posibles puesto que ya aparecen o bien en la misma columna, misma fila o en el cuadrado 3x3 correspondiente a la posición E6. En concreto, el `1`, `7`, `2` y `8` ya se encuentran en el mismo cuadrado 3x3. Los valores `3`, `5`, `6` y `9` se encuentran en la misma columna. Y los `7` y `8` se encuentran en la misma fila, aunque ya los habiamos descartado por encontrarse en el mismo cuadrado. Por tanto, en este caso, solo tenemos el `4` que cumple los requisitos.
 
-Now that we know how to eliminate values, we can take one pass, go over every box that has a value, and eliminate the values that can't appear on the box si ya aparecen en su misma columna, fila o cuadrado.
+Ahora que ya conocemos como eliminar valores, podemos hacerlo para todas las casillas que no tienen valor y eliminar los valores que no pueden aparecer en la casilla al estar ya presentes en su misma columna, fila o cuadrado 3x3.
 
-Vamos a incorporar en la anterior función `grid_values()` y añadir información con los valores posibles para una determinada casilla. Por ejemplo en `B5`pondremos el valor `47`(dado que `4` y `7`son los dos únicos valores posibles para esta casilla). Para ello, de momento vamos a reprogramar la función `grid_values()` para que nos devuelva `'123456789'` en vez del `'.'`para las casillas vacias, puesto que los valores iniciales para estas casillas puede ser cualquier valor.
+Vamos a incorporar en la anterior función `grid_values()` y añadir información con los valores posibles para una determinada casilla. Por ejemplo en `B5` pondremos el valor `47`(dado que `4` y `7`son los dos únicos valores posibles para esta casilla). Para ello, de momento vamos a reprogramar la función `grid_values()` para que nos devuelva `'123456789'` en vez del `'.'`para las casillas vacias, puesto que los valores iniciales para estas casillas puede ser cualquier valor.
 
 ```python
 def grid_values(grid):
