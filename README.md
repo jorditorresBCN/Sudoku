@@ -3,20 +3,18 @@ Hace unos días el periodista [Albert Molins publicaba en La Vanguardia](http://
 
 A raíz de este artículo algunos me han preguntado si podría explicar un poco más a nivel técnico como funciona por dentro estos sistemas supuestamente inteligentes. Aunque ciertamente son sistemas complejos, que requieren además mucha computación y no están al alcance de cualquiera, no es menos cierto que son algoritmos que un ingeniero informático sin ninguna duda puede entender, y me atrevería a decir, y programar. 
 
-Por ello, me he decidido escribir este  post para explicar como es el código de un programa que usa algunas de las técnicas de inteligencia artificial para resolver un juego como puede ser un _Sudoku_. El sistema que permite la resolución automático de este juego utiliza algunas técnicas a las que usan los sistemas que resuelven los anteriores juegos mencionados, aunque son sistemas mucho más sofisticados que más adelante ya intentaré hablar algún día. 
+Por ello, me he decidido escribir este  post para explicar como es el código de un programa que usa algunas de las técnicas de inteligencia artificial para resolver un juego como puede ser un _Sudoku_. El sistema que permite la resolución automático de este juego utiliza algunas técnicas de las que usan los sistemas que resuelven los anteriores juegos mencionados, aunque son sistemas mucho más sofisticados que más adelante ya intentaré hablar algún día. 
 
 Todos sabemos hacer un _Sudoku_ y sus reglas básicas, pero las recuerdo rápidamente redactándolas pensando ya en el algoritmo que presentaré:
 
-* Un _Sudoku_ es básicamente una cuadrícula de 9x9 casillas dividida en regiones de 3x3 casillas que:
-* Los valores que puede contener cualquier casilla  son `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`.
-* Si una casilla contiene un determinado valor, entonces ninguna de las casillas en la misma columna, fila o cuadrado de 3x3 al que pertenece dicha casilla no pueden contener este mismo valor.
+* Un _Sudoku_ es básicamente una cuadrícula de 9x9 casillas dividida en 9 cuadrados de 3x3 casillas.
+* Los valores que puede contener una casilla  son `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8` o `9`.
+* Si una casilla contiene un determinado valor, entonces ninguna de las casillas en la misma columna, fila o cuadrado de 3x3 al que pertenece dicha casilla no pueden contener ese mismo valor.
 * Si solo hay un valor permitido para una determinada casilla dada su columna, fila o cuadrado al que pertenece, entonces ese valor se le asignará a dicha casilla.
 
-Con la programación de estas simples reglas, este algoritmo "inteligente" que les propongo **siempre** (insisto, siempre) va a resolver cualquier Sudoku más rápido que usted, suponiendo que usted pueda resolverlo :-). 
+Con la programación de estas simples reglas, este algoritmo "inteligente" que les propongo, **siempre** (insisto, siempre) va a resolver cualquier Sudoku más rápido que cualquiera de sus amigos o amigas, suponiendo que ellos o ellas pueda resolverlo. Llevenlo encima en el mòbil :-). 
 
-He elegido el lenguaje **Python** que uso en mis cursos, pero intentaré explicar los pasos de forma independiente de cualquier lenguaje de programación para que se entienda la esencia del algoritmo que usa algunas técnicas clásicas de inteligencia artificial.
-
-Para presentar el tema sigo el modelo "learn by doing" que presupone que van ustedes escribiendo y experimentando a medida que van avanzando en el post, tal como lo hacemos en los hands-on de los laboratorios de mis clases en la UPC. En realidad les propongo que usen el entorno Anaconda disponible en cualquier sistema operativo actual y que pueden contar con una explicación detallada en [uno de los hands-on](https://github.com/jorditorresBCN/Quick-Start/blob/master/Phyton-Development-Environment-Quick-Start.md) de nuestra asignatura en la UPC). 
+Para presentar el tema sigo el modelo "learn by doing" que presupone que el lector va programando en **Python** (que uso en mis cursos) y experimentando a medida que van avanzando en el post, tal como lo hacemos en los hands-on de los laboratorios de mis clases en la UPC. En realidad les propongo que usen el entorno Anaconda disponible en cualquier sistema operativo actual y que pueden contar con una explicación detallada en [uno de los hands-on](https://github.com/jorditorresBCN/Quick-Start/blob/master/Phyton-Development-Environment-Quick-Start.md) de nuestra asignatura en la UPC). 
 
 1.	[Notación y nomenclatura](#notacion)
 2.	[Eliminación de opciones en una casilla](#eliminacion)
