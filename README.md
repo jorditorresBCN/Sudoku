@@ -16,15 +16,23 @@ Con la programación de estas simples reglas, este algoritmo "inteligente" que l
 
 He elegido el lenguaje **Python** que uso en mis cursos, pero intentaré explicar los pasos de forma independiente de cualquier lenguaje de programación para que se entienda la esencia del algoritmo que usa algunas técnicas clásicas de inteligencia artificial.
 
-Para presentar el tema sigo el modelo "learn by doing" que presupone que van ustedes escribiendo y experimentando a medida que van avanzando en el post, tal como lo hacemos en los hands-on de los laboratorios de mis clases en la UPC. En realidad les propongo que usen el entorno Anaconda disponible en cualquier sistema operativo actual y que pueden contar con una explicación detallada en [uno de los hands-on](https://github.com/jorditorresBCN/Quick-Start/blob/master/Phyton-Development-Environment-Quick-Start.md) de nuestra asignatura en la UPC). Adjunto en este repositorio veran el fichero `.ipynb` que yo he usado.
+Para presentar el tema sigo el modelo "learn by doing" que presupone que van ustedes escribiendo y experimentando a medida que van avanzando en el post, tal como lo hacemos en los hands-on de los laboratorios de mis clases en la UPC. En realidad les propongo que usen el entorno Anaconda disponible en cualquier sistema operativo actual y que pueden contar con una explicación detallada en [uno de los hands-on](https://github.com/jorditorresBCN/Quick-Start/blob/master/Phyton-Development-Environment-Quick-Start.md) de nuestra asignatura en la UPC). 
 
-## Algoritmo en Python
+1.	[Notación y nomenclatura](#notacion)
+2.	[Eliminación de opciones en una casilla](#eliminacion)
+3.	[Casillas con una sola opción](#solaopcion)
+4.	[Propagación de restricciones](#propagacion)
+5.	[Estategia Search](#search)
+6.	[Y para acabar](#conclusiones)
+7.	[Agradecimientos](#agradecimientos)
 
-### Notación y nomenclatura
+<a name="notacion"/>
+
+
+## 1. Notación y nomenclatura
 
 Antes de empezar a programar debemos acordar una cierta notación. Les propongo la siguiente.
 
-#### Etiquetado
 
 En nuestro código las filas las etiquetaremos con las letras `A`, `B`, `C`, `D`, `E`, `F`, `G`, `H`, `I`. Y las columnas con los números `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`. Es decir, las posiciones de nuestro tablero quedarán etiquetadas como:
 
@@ -49,7 +57,6 @@ En nuestro código las filas las etiquetaremos con las letras `A`, `B`, `C`, `D`
 * Para una casilla (`box`) en particular, sus pares ( que llamaremos `peers`)  seran todas las otras casillas (`boxes`) que pertenecen a una misma `unit` serán todas las otras `box` que pertenecen a cualquier `unit` común (misma columna, fila o cuadrado 3x3). Por tanto para cada casilla, hay 20 pares.  Por ejemplo los pares de `A1` son las casillas de la columna `A2`, `A3`, `A4`, `A5`, `A6`, `A7`, `A8`, `A9`, junto con las casillas de la columna `B1`, `C1`, `D1`, `E1`, `F1`, `G1`, `H1`, `I1` y junto con las casillas del cuadrado 3x3 formado por  `B2`, `B3`, `C2`, `C3` ( teniendo en cuenta que `A1`, `A2`, `A3`, `B1`, `C1` ya están contabilizados).
 
 
-#### La cuadrícula 
 
 Para facilitar la resolución del problema, vamos a almacenar nuestro tablero o cuadrícula en dos formatos: como `string` y como `dictionary`. 
 
@@ -154,8 +161,9 @@ el resultado de `display` será:
 8 . . |2 . 3 |. . 9 
 . . 5 |. 1 . |3 . . 
 ```
+<a name="eliminacion"/>
 
-## Eliminación de opciones en una casilla
+## 2. Eliminación de opciones en una casilla
 
 ### Descripción
 Como primer paso en nuestra estrategia usaremos lo que llamamos **eliminación** que trata de eliminar posibilidades de los pares.
@@ -303,7 +311,9 @@ display(eliminate(grid_values(example)))
    6     4679    5   |   4      1      47  |   3      8      2   
 ```
 
-## Casillas con una sola opción
+<a name="solaopcion"/>
+
+## 3. Casillas con una sola opción
 Ahora estamos en la situación de que nos encontramos en un punto donde hemos marcado casillas que en teoría pueden contener varias opciones pero que dados sus pares solo puede ser una de ellas.  Para ello, vamos a ir a través de todas las `units` y en el caso de que encontremos una `unit` con un valor que solo encaja en una casilla, vamos a asignar este valor en dicha casilla. Por ejemplo, en nuestro ejemplo, el primer cuadrado 3x3 tiene los siguientes valores:
 
 ```
@@ -350,7 +360,9 @@ display(example_after_only_choice)
 
 ```
 
-## Propagación de restricciones
+<a name="propagacion"/>
+
+## 4. Propagación de restricciones
 Después de analizar estas dos estrategias para encontrar limitaciones locales que nos permiten encontrar valores a las casillas, lo que intuitivamente se nos ocurre es combinarlas iterativamente para ir resolviendo el *sudoku*, donde en cada iteración, los nuevos valores resueltos nos dan la solución para otras casillas. Por tanto, el código que nos queda podría ser:
 
 ```python
@@ -414,7 +426,9 @@ display(reduce_puzzle(grid_values(example)))
 6 9 5 |4 1 7 |3 8 2 
 ```
 
-## Estategia `Search`
+<a name="search"/>
+
+## 5. Estategia `Search`
 
 ¿Pero estamos seguros que únicamente con las dos anteriores estrategias tenemos suficiente para resolver cualquier _sudoku_? Veamos el siguiente ejemplo:
 
@@ -517,11 +531,13 @@ display(solve(example))
 6 7 2 |5 8 4 |9 1 3 
 
 ```
+<a name="conclusiones"/>
 
-## Y para acabar
+## 6. Y para acabar
 En este post he querido mostrar con la excusa de resolver un _Sudoku_  como es un algoritmo que usa técnicas simples de inteligencia artificial. Ahora bien, debo enfatizar que en realidad los problemas como el Ajedrez, GO o Poker, mencionados anteriormente, tienen una complejidad tal que aplicar tal cual el algoritmo `search()`presentado aquí es imposible, pues tardaríamos siglos a computar la solución (el juego del *Sudoku* a pesar de todo tiene muy pocas combinaciones para explorar). En estos casos existen un gran número de técnicas que si el lector le interesa profundizar un poco más le recomiendo el libro [Artificial Intelligence, a modern approach](https://en.wikipedia.org/wiki/Artificial_Intelligence:_A_Modern_Approach) que solo contiene 1132 páginas. Quizás hay otros con menos páginas pero no duden que este está muy bien.
 
 En este mismo repositorio encontraran el notebook `.ipnb` que seguro les puede facilitar seguir este post. Suerte!
 
-## Agradecimientos
+<a name="agradecimientos"/>
+## 7. Agradecimientos
 Para este ejercicio nos hemos inspirado en el [post fantástico de Peter Norvig](http://norvig.com/sudoku.html) y parte del programa de [Artificial Intelligence de Udacity](https://www.udacity.com). 
