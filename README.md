@@ -51,16 +51,16 @@ En nuestro código las filas las etiquetaremos con las letras `A`, `B`, `C`, `D`
  ```
  En el código vamos a usar la siguiente nomenclatura:
  
-* The individual squares at the intersection of rows and columns will be called `boxes` . These boxes will have labels 'A1', 'A2', ..., 'I9'.
-* The complete rows, columns, and 3x3 squares, will be called `units`. Thus, each unit is a set of 9 boxes, and there are 27 units in total.
-* For a particular box (such as 'A1'), sus pares ( `peers`)  will be all other boxes that belong to a common unit (namely, those that belong to the same row, column, or 3x3 square). Por tanto para cada casilla, hay 20 pares.  Por ejemplo los pares de 'A1' son :  row: A2, A3, A4, A5, A6, A7, A8, A9 column: B1, C1, D1, E1, F1, G1, H1, I1 3x3 square: B2, B3, C2, C3 (since A1, A2, A3, B1, C1 are already counted).
+* A las casillas en el código las llamaremos `boxes`.
+* A las columnas, filas o cuadrados 3x3 los llamaremos `units`.  Por tanto, cada elemento de `units` contiene 9 `boxes`, siendo 27 el número total de `units`. 
+* Para una casilla (`box`) en particular, sus pares ( que llamaremos `peers`)  seran todas las otras casillas (`boxes`) que pertenecen a una misma `unit` serán todas las atras `box` que pertenecen a cualquier `unit` común (misma columna, fila o quadrado 3x3). Por tanto para cada casilla, hay 20 pares.  Por ejemplo los pares de `A1` son las casillas de la columna `A2`, `A3`, `A4`, `A5`, `A6`, `A7`, `A8`, `A9`, junto con las casillas de la columna `B1`, `C1`, `D1`, `E1`, `F1`, `G1`, `H1`, `I1` y junto con las casillas del cuadrado 3x3 formado por  `B2`, `B3`, `C2`, `C3` ( teniendo en cuenta que `A1`, `A2`, `A3`, `B1`, `C1` ya están contabilizados).
 
 
 #### La cuadrícula 
 
 Para facilitar la resolución del problema, vamos a almacenar nuestro tablero o cuadrícula en dos formatos: como `string` y como `dictionary`. 
 
-The string will consist of a concatenation of all the readings of the digits in the rows, taking the rows from top to bottom. If the puzzle is not solved, we can use a **.** para indicar que la casilla aun no tiene valor asignado. 
+El formato `string` cosistir en la concatenación de todos los dígitos de todas las casillas de las filas desde arriba hacia abajo. Si el _Sudoku_ aun no está solucionado podemos usar **.** para indicar que la casilla aun no tiene valor asignado. 
  Por ejemplo el tablero: 
  ```
 . . 3 |. 2 . |6 . . 
