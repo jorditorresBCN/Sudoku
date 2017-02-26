@@ -519,7 +519,9 @@ display(solve(example))
 ```
 
 ## Y para acabar
-En este post he querido mostrar con la excusa de resolver un _Sudoku_  como es un algoritmo que usa técnicas simples de inteligencia artificial. Ahora bien, debo enfatizar que en realidad los problemas como el Ajedrez, GO o Poker, mencionados anteriormente, tienen una complejidad tal que aplicar tal qual el algoritmo `search()`presentado aquí es imposible, pues tardariamos decenios a computar la solución (el juego del *Sudoku* a pesar de todo tiene muy pocas combinaciones para explorar). En estos casos existen un gran número de técnicas que si el lector le interesa profundizar un poco más le recomiendo el libro [Artificial Intelligence, a modern approach](https://en.wikipedia.org/wiki/Artificial_Intelligence:_A_Modern_Approach) que solo contiene 1132 páginas. 
+En este post he querido mostrar con la excusa de resolver un _Sudoku_  como es un algoritmo que usa técnicas simples de inteligencia artificial. Ahora bien, debo enfatizar que en realidad los problemas como el Ajedrez, GO o Poker, mencionados anteriormente, tienen una complejidad tal que aplicar tal qual el algoritmo `search()`presentado aquí es imposible, pues tardariamos decenios a computar la solución (el juego del *Sudoku* a pesar de todo tiene muy pocas combinaciones para explorar). En estos casos existen un gran número de técnicas que si el lector le interesa profundizar un poco más le recomiendo el libro [Artificial Intelligence, a modern approach](https://en.wikipedia.org/wiki/Artificial_Intelligence:_A_Modern_Approach) que solo contiene 1132 páginas. Quizás hay otros con menos páginas pero no duden que este está muy bien.
 
-### Agradecimientos
+En este mismo repositorio encontraran el notebook `.ipnb` que seguro les puede facilitar seguir este post. Suerte!
+
+## Agradecimientos
 Para este ejercicio nos hemos inspirado en el [post fantástico de Peter Norvig](http://norvig.com/sudoku.html) y parte del programa de [Artificial Intelligence de Udacity](https://www.udacity.com). 
