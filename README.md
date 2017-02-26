@@ -21,12 +21,6 @@ Para presentar el tema sigo el modelo "learn by doing" que presupone que van ust
 
 ## Algoritmo en Python
 
-### Basado en técnicas de Inteligencia Artificial
-Se trata de un simble algoritmo en Python que usa dos técnicas básicas de Inteligencia Artificial:
-* **Constraint Propagation**: Al intentar resolver un problema, verá que hay algunas limitaciones locales para cada cuadrado. Estas limitaciones ayudan a reducir las posibilidades de la respuesta, que puede ser muy útil. Aprenderemos a extraer la máxima información de estas restricciones para acercarnos a nuestra solución. Además, verá cómo podemos aplicar repetidamente restricciones simples para reducir iterativamente el espacio de búsqueda de posibles soluciones. 
-
-* **Search**: En el proceso de resolución de problemas, a menudo llegamos al punto en que existen varias posibilidades. Una forma de atacar el problema es crear un árbol completo de posibilidades y encontrar formas de recorrer el árbol hasta encontrar nuestra solución.
-
 ### Notación y nomenclatura
 
 Antes de empezar a programar debemos acordar una cierta notación. Les propongo la siguiente.
@@ -123,7 +117,7 @@ Para ello implementamos una nueva función que llamaremos `grid_values()` basada
 
 
 ```python
-def grid_values(grid):
+def grid_values_original(grid):
     return dict(zip(boxes, grid))
 ```
 Recordemos que el string de entrada a la función que representa el tablero de nuestro sudoku debe ser de 81 carácteres (9x9) compuesto de dígitos `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, o bien de `.` si aun no lo sabemos. Veamos un ejemplo, pero previamente nos dotamos de una función para visualizar más facilmente nuestro tablero de sudoku:
@@ -145,7 +139,7 @@ Con esta función podemos visualizar  el tablero en el formato que estamos acost
 
 ```python
 example='483.2.6..9..3.5..1..18.64....81.29..7.......8..67.82....26.95..8..2.3..9..5.1.382'
-display(grid_values(example))
+display(grid_values_original(example))
 ```
 el resultado de `display` será:
 ```
@@ -162,11 +156,10 @@ el resultado de `display` será:
 . . 5 |. 1 . |3 . . 
 ```
 
-## Primera técnica: Eliminación
+## Eliminación de opciones
 
+### Descripción
 Como primer paso en nuestra estratégia usaremos lo que llamamos **eliminación** que trata de eliminar posibilidades de los pares.
-
-AFEGIR DIBUIX DE SUDOKU ELIMINATION
 
 Empezaremos mirando una casilla y analizando que valores pueden ir allí. Por ejemplo en la posición E6, marcado con una X en el siguiente tablero:
 ```
@@ -186,7 +179,8 @@ Vemos de entre los posibles valores `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9` 
 
 Ahora que ya conocemos como eliminar valores, podemos hacerlo para todas las casillas que no tienen valor y eliminar los valores que no pueden aparecer en la casilla al estar ya presentes en su misma columna, fila o cuadrado 3x3.
 
-Vamos a incorporar en la anterior función `grid_values()` y añadir información con los valores posibles para una determinada casilla. Por ejemplo en `B5` pondremos el valor `47`(dado que `4` y `7`son los dos únicos valores posibles para esta casilla). Para ello, de momento vamos a reprogramar la función `grid_values()` para que nos devuelva `'123456789'` en vez del `'.'`para las casillas vacias, puesto que los valores iniciales para estas casillas puede ser cualquier valor.
+### función `grid_values()`
+Para ello, de momento vamos a reprogramar la función `grid_values()` para que nos devuelva `'123456789'` en vez del `'.'`para las casillas vacias, puesto que los valores iniciales para estas casillas puede ser cualquier valor.
 
 ```python
 def grid_values(grid):
@@ -198,9 +192,41 @@ def grid_values(grid):
             values.append(c)
     return dict(zip(boxes, values))
  ```
-Ahora esta función convierte el string que recibe de entrada (con 9x9 carácteres) en un diccionario `{<box>: <value>}` que contiene para cada clave (que indica la posiciónc dentro del tablero) su valor correspondiente o '123456789' si está vacio.
+Ahora esta función convierte el string que recibe de entrada (con 9x9 carácteres) en un diccionario `{<box>: <value>}` que contiene para cada clave (que indica la posición dentro del tablero) su valor correspondiente o '123456789' si está vacio.
 
-## Segundo paso: Eliminación
+```python
+example='483.2.6..9..3.5..1..18.64....81.29..7.......8..67.82....26.95..8..2.3..9..5.1.382'
+display(grid_values_original(example))
+display(grid_values(example))
+```
+```
+4 8 3 |. 2 . |6 . . 
+9 . . |3 . 5 |. . 1 
+. . 1 |8 . 6 |4 . . 
+------+------+------
+. . 8 |1 . 2 |9 . . 
+7 . . |. . . |. . 8 
+. . 6 |7 . 8 |2 . . 
+------+------+------
+. . 2 |6 . 9 |5 . . 
+8 . . |2 . 3 |. . 9 
+. . 5 |. 1 . |3 8 2 
+    4         8         3     |123456789     2     123456789 |    6     123456789 123456789 
+    9     123456789 123456789 |    3     123456789     5     |123456789 123456789     1     
+123456789 123456789     1     |    8     123456789     6     |    4     123456789 123456789 
+------------------------------+------------------------------+------------------------------
+123456789 123456789     8     |    1     123456789     2     |    9     123456789 123456789 
+    7     123456789 123456789 |123456789 123456789 123456789 |123456789 123456789     8     
+123456789 123456789     6     |    7     123456789     8     |    2     123456789 123456789 
+------------------------------+------------------------------+------------------------------
+123456789 123456789     2     |    6     123456789     9     |    5     123456789 123456789 
+    8     123456789 123456789 |    2     123456789     3     |123456789 123456789     9     
+123456789 123456789     5     |123456789     1     123456789 |    3         8         2     
+```
+
+
+### función `eliminate()`
+El siguiente paso consiste en reducir los valores posibles de las casillas de acuerdo a la descripción que hemos hecho anteriormente. 
 
 Para ello primero debemos tener controladas todas las columnas, todas las filas y todos los cuadrados de 3x3 relacionados con una determinada casilla del tablero.  Para ello con la misma función `cross('abc', 'def')` vamos a generar todas las columnas, todas las filas y todos los cuadrados de 3x3:
 
@@ -229,14 +255,13 @@ Con el constructor `dict()` que construye diccionarios directamente de secuencia
 ```python
 units = dict((s, [u for u in unitlist if s in u]) for s in boxes)
  ```
-Por otro lado, usando el módulo `sets` (que provides classes for constructing and manipulating unordered collections of unique elements) construimos el diccionario `peers` que nos elimina duplicados de casillas por cada casilla:
+Por otro lado, usando el módulo `sets` (que permite construir y manipular colecciones no ordenadas de elementos únicos) construimos el diccionario `peers` que nos elimina duplicados de casillas por cada casilla:
 
 ```python
 peers = dict((s, set(sum(units[s],[]))-set([s])) for s in boxes)
  ```
- 
-Now, let's finish the code for the function `eliminate()`. The function will iterate over all the boxes in the puzzle that only have one value assigned to them, and it will remove this value from every one of its peers. `eliminate()` Go through all the boxes, and whenever there is a box with a single value, eliminate this value from the set of values of all its peers.
-will take as input a puzzle in dictionary form y retornará un nuevo diccionario con los valores eliminados.
+
+En resumen, la función `eliminate()` iterará sobre todas las celdas de la cuadrícula que tienen solo un valor asignado, y borrará este valor de todos sus pares. La vamos a implementar de tal manera que reciba como entrada un diccionario y retornará otro diccionario con los valores eliminados.
  
 ```python
 def eliminate(values):
@@ -248,6 +273,48 @@ def eliminate(values):
     return values
 ```
 
+```python
+example='483.2.6..9..3.5..1..18.64....81.29..7.......8..67.82....26.95..8..2.3..9..5.1.382'
+display(grid_values(example))
+display(eliminate(grid_values(example)))
+```
+
+```
+    4         8         3     |123456789     2     123456789 |    6     123456789 123456789 
+    9     123456789 123456789 |    3     123456789     5     |123456789 123456789     1     
+123456789 123456789     1     |    8     123456789     6     |    4     123456789 123456789 
+------------------------------+------------------------------+------------------------------
+123456789 123456789     8     |    1     123456789     2     |    9     123456789 123456789 
+    7     123456789 123456789 |123456789 123456789 123456789 |123456789 123456789     8     
+123456789 123456789     6     |    7     123456789     8     |    2     123456789 123456789 
+------------------------------+------------------------------+------------------------------
+123456789 123456789     2     |    6     123456789     9     |    5     123456789 123456789 
+    8     123456789 123456789 |    2     123456789     3     |123456789 123456789     9     
+123456789 123456789     5     |123456789     1     123456789 |    3         8         2     
+   4      8      3   |   9      2      17  |   6     579     57  
+   9     267     7   |   3      47     5   |   78     27     1   
+   25    257     1   |   8      79     6   |   4    23579   357  
+---------------------+---------------------+---------------------
+   35    345     8   |   1     3456    2   |   9    34567  34567 
+   7    123459   49  |  459   34569    4   |   1    13456    8   
+  135   13459    6   |   7     3459    8   |   2     1345   345  
+---------------------+---------------------+---------------------
+   13    1347    2   |   6     478     9   |   5     147     47  
+   8     1467    47  |   2     457     3   |   17    1467    9   
+   6     4679    5   |   4      1      47  |   3      8      2   
+```
+
+
+xxxxx
+
+### Basado en técnicas de Inteligencia Artificial
+Se trata de un simble algoritmo en Python que usa dos técnicas básicas de Inteligencia Artificial:
+* **Constraint Propagation**: Al intentar resolver un problema, verá que hay algunas limitaciones locales para cada cuadrado. Estas limitaciones ayudan a reducir las posibilidades de la respuesta, que puede ser muy útil. Aprenderemos a extraer la máxima información de estas restricciones para acercarnos a nuestra solución. Además, verá cómo podemos aplicar repetidamente restricciones simples para reducir iterativamente el espacio de búsqueda de posibles soluciones. 
+
+* **Search**: En el proceso de resolución de problemas, a menudo llegamos al punto en que existen varias posibilidades. Una forma de atacar el problema es crear un árbol completo de posibilidades y encontrar formas de recorrer el árbol hasta encontrar nuestra solución.
+
+
+xxxxxx
 
 # Strategy 2: Only Choice
 ARA VAIG PER AQUÍ no he continuat per tenir més temps
