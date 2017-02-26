@@ -16,7 +16,7 @@ Con la programación de estas simples reglas, este algoritmo "inteligente" que l
 
 He elegido el lenguage **Python** que uso en mis cursos, pero intentaré explicar los pasos de forma independiente de cualquier lenguage de programació para que se entienda la esencia del algoritmo que usa algunas técnicas clásicas de inteligencia artificial.
 
-Para presentar el tema sigo el modelo "learn by doing" que presupone que van ustedes escribiendo y experimentando a medida quan van avanzando en el post, tal como lo hacemos en los hands-on de los laboratorios de mis clases en la UPC. En realidad les propongo que usen el entorno Anaconda disponible en cualquier sistema operativo actual y que pueden contar con una explicación detallada en [uno de los hands-on](https://github.com/jorditorresBCN/Quick-Start/blob/master/Phyton-Development-Environment-Quick-Start.md) de nuestra asignatura en la UPC). Adjunto veran el fichero `.ipnb`que yo he usado.
+Para presentar el tema sigo el modelo "learn by doing" que presupone que van ustedes escribiendo y experimentando a medida quan van avanzando en el post, tal como lo hacemos en los hands-on de los laboratorios de mis clases en la UPC. En realidad les propongo que usen el entorno Anaconda disponible en cualquier sistema operativo actual y que pueden contar con una explicación detallada en [uno de los hands-on](https://github.com/jorditorresBCN/Quick-Start/blob/master/Phyton-Development-Environment-Quick-Start.md) de nuestra asignatura en la UPC). Adjunto veran el fichero `.ipynb`que yo he usado.
 
 ## Algoritmo en Python
 
