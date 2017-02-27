@@ -1,18 +1,18 @@
 # Tu primer programa de Inteligencia Artificial: resolver un Sudoku
 Hace unos días el periodista [Albert Molins publicaba en La Vanguardia](http://jorditorres.org/inteligencia-artificial-y-poquer/) un excelente artículo titulado “Una máquina gana al póquer a los mejores jugadores del mundo” para el que me llamo para contrastar algunos datos sobre este sistema de inteligencia artificial, Libratus, desarrollado por la Universidad Carnegie Mellon. En el mismo artículo Albert se hacia eco de anteriores duelos entre sistemas de inteligencia artificial y humanos en diferentes juegos como el Ajedrez (en 1997 el ordenador Deeper Blue derrotó a Kaspárov), concurso de preguntas y respuestas de la televisión estadounidense (en 2011 el ordenador Watson ganó a Brad Ruttler y Ken Jennings, los dos mejores concursantes del concurso Jeopardy) o el Go (en el 2016 el sistema AlphaGo desarrollado por la empresa DeepMind de Google ganó a Lee Se-dol, campeón mundial de Go).
 
-A raíz de este artículo algunos me han preguntado si podría explicar un poco más a nivel técnico como funciona por dentro estos sistemas supuestamente inteligentes. Aunque ciertamente son sistemas complejos, que requieren además mucha computación y no están al alcance de cualquiera, no es menos cierto que son algoritmos que un ingeniero informático sin ninguna duda puede entender, y me atrevería a decir, y programar. 
+A raíz de este artículo algunos me han preguntado si podría explicar un poco más a nivel técnico como funcionan por dentro estos sistemas supuestamente inteligentes. Aunque ciertamente son sistemas complejos, que requieren además mucha computación y no están al alcance de cualquiera, no es menos cierto que son algoritmos que un ingeniero informático sin ninguna duda puede entender, y me atrevería a decir, programar. 
 
-Por ello, me he decidido escribir este  post para explicar como es el código de un programa que usa algunas de las técnicas de inteligencia artificial para resolver un juego como puede ser un _Sudoku_. El sistema que permite la resolución automático de este juego utiliza algunas técnicas de las que usan los sistemas que resuelven los anteriores juegos mencionados, aunque son sistemas mucho más sofisticados que más adelante ya intentaré hablar algún día. 
+Por ello, he decidido escribir este  post para explicar como es el código de un programa que usa algunas de las técnicas de inteligencia artificial para resolver un juego como puede ser un _Sudoku_. El sistema que permite la resolución automática de este juego utiliza algunas técnicas de las que usan los sistemas que resuelven los anteriores juegos mencionados, aunque son sistemas mucho más sofisticados que ya intentaré explicar algún día. 
 
 Todos sabemos hacer un _Sudoku_ y sus reglas básicas, pero las recuerdo rápidamente redactándolas pensando ya en el algoritmo que presentaré:
 
 * Un _Sudoku_ es básicamente una cuadrícula de 9x9 casillas dividida en 9 cuadrados de 3x3 casillas.
 * Los valores que puede contener una casilla  son `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8` o `9`.
-* Si una casilla contiene un determinado valor, entonces ninguna de las casillas en la misma columna, fila o cuadrado de 3x3 al que pertenece dicha casilla no pueden contener ese mismo valor.
-* Si solo hay un valor permitido para una determinada casilla dada su columna, fila o cuadrado al que pertenece, entonces ese valor se le asignará a dicha casilla.
+* Si una casilla contiene un determinado valor, entonces ninguna de las casillas en la misma columna, fila o cuadrado de 3x3 al que pertenece dicha casilla puede contener ese mismo valor.
+* Si solo hay un valor permitido para una determinada casilla dada su columna, fila o cuadrado al que pertenece, entonces ese valor se asignará a dicha casilla.
 
-Con la programación de estas simples reglas, este algoritmo "inteligente" que les propongo, **siempre** (insisto, siempre) va a resolver cualquier Sudoku más rápido que cualquiera de sus amigos o amigas, suponiendo que ellos o ellas pueda resolverlo. Llevenlo encima en el mòbil :-). 
+Con la programación de estas simples reglas, este algoritmo "inteligente" que les propongo, **siempre** (insisto, siempre) va a resolver cualquier Sudoku más rápido que cualquiera de sus amigos o amigas, suponiendo que ellos o ellas pueda resolverlo. Llévenlo encima en el móvil :-). 
 
 Para presentar el tema sigo el modelo "learn by doing" que presupone que el lector va programando en **Python** (que uso en mis cursos) y experimentando a medida que van avanzando en el post, tal como lo hacemos en los hands-on de los laboratorios de mis clases en la UPC. En realidad les propongo que usen el entorno Anaconda disponible en cualquier sistema operativo actual y que pueden contar con una explicación detallada en [uno de los hands-on](https://github.com/jorditorresBCN/Quick-Start/blob/master/Phyton-Development-Environment-Quick-Start.md) de nuestra asignatura en la UPC). 
 
@@ -52,13 +52,13 @@ En nuestro código las filas las etiquetaremos con las letras `A`, `B`, `C`, `D`
  
 * A las casillas en el código las llamaremos `boxes`.
 * A las columnas, filas o cuadrados 3x3 los llamaremos `units`.  Por tanto, cada elemento de `units` contiene 9 `boxes`, siendo 27 el número total de `units`. 
-* Para una casilla (`box`) en particular, sus pares ( que llamaremos `peers`)  seran todas las otras casillas (`boxes`) que pertenecen a una misma `unit` serán todas las otras `box` que pertenecen a cualquier `unit` común (misma columna, fila o cuadrado 3x3). Por tanto para cada casilla, hay 20 pares.  Por ejemplo los pares de `A1` son las casillas de la columna `A2`, `A3`, `A4`, `A5`, `A6`, `A7`, `A8`, `A9`, junto con las casillas de la columna `B1`, `C1`, `D1`, `E1`, `F1`, `G1`, `H1`, `I1` y junto con las casillas del cuadrado 3x3 formado por  `B2`, `B3`, `C2`, `C3` ( teniendo en cuenta que `A1`, `A2`, `A3`, `B1`, `C1` ya están contabilizados).
+* Para una casilla (`box`) en particular, sus pares (que llamaremos `peers`) serán todas las otras casillas (`boxes`) que pertenecen a una misma `unit`, es decir, serán todas las otras `box` que pertenecen a cualquier `unit` común (misma columna, fila o cuadrado 3x3). Por tanto para cada casilla, hay 20 pares.  Por ejemplo los pares de `A1` son las casillas de la columna `A2`, `A3`, `A4`, `A5`, `A6`, `A7`, `A8`, `A9`, junto con las casillas de la columna `B1`, `C1`, `D1`, `E1`, `F1`, `G1`, `H1`, `I1` y junto con las casillas del cuadrado 3x3 formado por  `B2`, `B3`, `C2`, `C3` (teniendo en cuenta que `A1`, `A2`, `A3`, `B1`, `C1` ya están contabilizados).
 
 
 
 Para facilitar la resolución del problema, vamos a almacenar nuestro tablero o cuadrícula en dos formatos: como `string` y como `dictionary`. 
 
-El formato `string` cosiste en la concatenación de todos los dígitos de todas las casillas de las filas desde arriba hacia abajo. Si el _Sudoku_ aun no está solucionado podemos usar **.** para indicar que la casilla aun no tiene valor asignado. 
+El formato `string` cosiste en la concatenación de todos los dígitos de todas las casillas de las filas desde arriba hacia abajo. Si el _Sudoku_ aún no está solucionado podemos usar **.** para indicar que la casilla aún no tiene valor asignado. 
  Por ejemplo el tablero: 
  ```
 . . 3 |. 2 . |6 . . 
@@ -78,16 +78,16 @@ lo almacenaremos con el `string`:
 '..3.2.6..9..3.5..1..18.64....81.29..7.......8..67.82....26.95..8..2.3..9..5.1.3..'
 ```
 
-Por otra parte implementemos el diccionario de tal manera que  las *keys* serán los *strings* correspondientes a las casillas (  `'A1', 'A2', ..., 'I9'`) y los valores seran o bien el dígito en la casilla o '.'.
+Por otra parte implementaremos el diccionario de tal manera que las *keys* serán los *strings* correspondientes a las casillas (`'A1', 'A2', ..., 'I9'`) y los valores seran o bien el dígito en la casilla o '.'.
 
-Para generar nuestra estructura de datos que contendrá el tablero cuadriculado vamos a empezar programando una función de soporte que llamaremos `cross(a, b)` que dados dos strings `a` y `b` la función retorna la lista  (recordemos que una lista se especifica con `[` `]`) formada por todas las posibles concatenaciones de letras `s`en el string `a` con la `t` en el string `b`.  
+Para generar nuestra estructura de datos que contendrá el tablero cuadriculado vamos a empezar programando una función de soporte que llamaremos `cross(a, b)` que dados dos strings `a` y `b` la función retorna la lista  (recordemos que una lista se especifica con `[` `]`) formada por todas las posibles concatenaciones de letras `s` en el string `a` con la `t` en el string `b`.  
 
 ```python
 def cross(a, b):
       return [s+t for s in a for t in b]
 ```
 
-Por ejemplo `cross('abc', 'def')` retornara la lista `['ad', 'ae', 'af', 'bd', 'be', 'bf', 'cd', 'ce', 'cf']`. Ahora, para crear todas las etiquetas de las casillas que almacenaremos en `boxes` podemos hacerlo de la siguiente manera:
+Por ejemplo `cross('abc', 'def')` retornará la lista `['ad', 'ae', 'af', 'bd', 'be', 'bf', 'cd', 'ce', 'cf']`. Ahora, para crear todas las etiquetas de las casillas que almacenaremos en `boxes` podemos hacerlo de la siguiente manera:
 
 ```python
 rows = 'ABCDEFGHI'
@@ -101,7 +101,7 @@ Podemos comprobarlo con `print boxes` o `print (boxes)` (dependiendo si usamos P
 
 ```
 
-En este punto tenemos en formato string el contenido de nuestro tablero y vamos a pasarlo en formato diccionario de Python usando la notación que hemos decidido anteriormente. Es decir, el string `'..3.2.6..9..3.5..1..18.64....81.29..7.......8..67.82....26.95..8..2.3..9..5.1.3..'` lo queremos tener como:
+En este punto tenemos en formato string el contenido de nuestro tablero y vamos a pasarlo a formato diccionario de Python usando la notación que hemos decidido anteriormente. Es decir, el string `'..3.2.6..9..3.5..1..18.64....81.29..7.......8..67.82....26.95..8..2.3..9..5.1.3..'` lo queremos tener como:
 
 ```
 {
@@ -180,7 +180,7 @@ Empezaremos mirando una casilla y analizando que valores pueden ir allí. Por ej
 8 . . |2 . 3 |. . 9 
 . . 5 |. 1 . |3 . . 
 ```
-Vemos de entre los posibles valores `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9` no todos son posibles puesto que ya aparecen o bien en la misma columna, misma fila o en el cuadrado 3x3 correspondiente a la posición E6. En concreto, el `1`, `7`, `2` y `8` ya se encuentran en el mismo cuadrado 3x3. Los valores `3`, `5`, `6` y `9` se encuentran en la misma columna. Y los `7` y `8` se encuentran en la misma fila, aunque ya los habíamos descartado por encontrarse en el mismo cuadrado. Por tanto, en este caso, solo tenemos el `4` que cumple los requisitos.
+Vemos de entre los posibles valores `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9` no todos son posibles puesto que ya aparecen o bien en la misma columna, misma fila o en el cuadrado 3x3 correspondiente a la posición E6. En concreto, el `1`, `7`, `2` y `8` ya se encuentran en el mismo cuadrado 3x3. Los valores `3`, `5`, `6` y `9` se encuentran en la misma columna. Y los valores `7` y `8` se encuentran en la misma fila, aunque ya los habíamos descartado por encontrarse en el mismo cuadrado. Por tanto, en este caso, solo tenemos el `4` que cumple los requisitos.
 
 Ahora que ya conocemos como eliminar valores, podemos hacerlo para todas las casillas que no tienen valor y eliminar los valores que no pueden aparecer en la casilla al estar ya presentes en su misma columna, fila o cuadrado 3x3.
 
@@ -233,7 +233,7 @@ display(grid_values(example))
 ### función `eliminate()`
 El siguiente paso consiste en reducir los valores posibles de las casillas de acuerdo a la descripción que hemos hecho anteriormente. 
 
-Para ello primero debemos tener controladas todas las columnas, todas las filas y todos los cuadrados de 3x3 relacionados con una determinada casilla del tablero.  Para ello con la misma función `cross('abc', 'def')` vamos a generar todas las columnas, todas las filas y todos los cuadrados de 3x3:
+Para ello primero debemos tener controladas todas las columnas, todas las filas y todos los cuadrados de 3x3 relacionados con una determinada casilla del tablero. Para ello con la misma función `cross('abc', 'def')` vamos a generar todas las columnas, todas las filas y todos los cuadrados de 3x3:
 
 ```python
 row_units = [cross(r, cols) for r in rows]
@@ -321,7 +321,7 @@ Ahora estamos en la situación de que nos encontramos en un punto donde hemos ma
 |   25    257     1   |  
 +---------------------+
 ```
-Si miramos la casilla `B2` vemos que puede contener tres valores: `2`,`6` o `7`. Pero resulta que el `6` solo puede aparecer en esta casilla, por ello ja le asignamos este valor a la casilla eliminando opciones en realidad.
+Si miramos la casilla `B2` vemos que puede contener tres valores: `2`,`6` o `7`. Pero resulta que solo el `6` puede aparecer en esta casilla, por ello ya le asignamos este valor a la casilla eliminando las otras opciones.
 
 ```python
 display(example_after_eliminate)
@@ -385,7 +385,7 @@ def reduce_puzzle(values):
             return False
     return values
 ```
-En este código tenemos en cuenta cuando debemos parar, con la condición de `stalled = solved_values_before == solved_values_after`, bque nos indica cuando en una nueva iteración no se ha podido resolver ninguna nueva casilla. En el caso que retorna `false` porque en una casilla no contenga ningún valor posible lo veremos en el siguiente apartado.
+En este código tenemos en cuenta cuando debemos parar, con la condición de `stalled = solved_values_before == solved_values_after`, que nos indica cuando en una nueva iteración no se ha podido resolver ninguna nueva casilla. Es el caso que retorna `false` porque alguna casilla no contenga ningún valor posible, lo veremos en el siguiente apartado.
 
 
 Si retomamos el ejemplo inicial vemos que con estas dos simples estrategias podemos solucionar el *sudoku*:
@@ -463,7 +463,7 @@ display(reduce_sudoku(grid_values(example)))
  16789   126789  26789  | 145789  145678  14579  | 15679   124569    3    
 ```
 
-¿Que pasa si tenemos un sudoku  que no sabemos solucionar tan fácilmente? Vamos a presentar otra técnica básica del mundo de la Inteligencia Artificial para solucionar este problema. Se conoce por `Search`. No entraremos en detalle, pero la idea es que en el proceso de resolución de problemas, a menudo llegamos al punto en que existen varias posibilidades. Una forma de atacar el problema es crear un árbol completo de posibilidades y encontrar formas de recorrer el árbol hasta encontrar nuestra solución. 
+¿Que pasa si tenemos un sudoku  que no sabemos solucionar tan fácilmente? Vamos a presentar otra técnica básica del mundo de la Inteligencia Artificial para solucionar este problema. Se conoce como `Search`. No entraremos en detalle, pero la idea es que en el proceso de resolución de problemas, a menudo llegamos al punto en que existen varias posibilidades. Una forma de atacar el problema es crear un árbol completo de posibilidades y encontrar formas de recorrer el árbol hasta encontrar nuestra solución. 
  
 Por ejemplo, la casilla `A2` tiene 5 posibilidades: `4`, `5`, `7`, `8` y `9`. Lo que hacemos es considerar que contiene un `4` y resolver el *Sudoku*. Si no lo podemos resolver (nos vendrá indicado por el retorno de `false` en la función `reduce_puzzle()` probamos con el siguiente, el `5`, y así sucesivamente. Evidentemente es 5 veces más trabajo, pero es la manera de conseguir todas las opciones.
 
@@ -532,7 +532,7 @@ display(solve(example))
 <a name="conclusiones"/>
 
 ## 6. Y para acabar
-En este post he querido mostrar con la excusa de resolver un _Sudoku_  como es un algoritmo que usa técnicas simples de inteligencia artificial. Ahora bien, debo enfatizar que en realidad los problemas como el Ajedrez, GO o Poker, mencionados anteriormente, tienen una complejidad tal que aplicar tal cual el algoritmo `search()`presentado aquí es imposible, pues tardaríamos siglos a computar la solución (el juego del *Sudoku* a pesar de todo tiene muy pocas combinaciones para explorar). En estos casos existen un gran número de técnicas que si el lector le interesa profundizar un poco más le recomiendo el libro [Artificial Intelligence, a modern approach](https://en.wikipedia.org/wiki/Artificial_Intelligence:_A_Modern_Approach) que solo contiene 1132 páginas. Quizás hay otros con menos páginas pero no duden que este está muy bien.
+En este post he querido mostrar con la excusa de resolver un _Sudoku_  como es un algoritmo que usa técnicas simples de inteligencia artificial. Ahora bien, debo enfatizar que en realidad los problemas como el Ajedrez, GO o Poker, mencionados anteriormente, tienen una complejidad tal que aplicar tal cual el algoritmo `search()` presentado aquí es imposible, pues tardaríamos siglos en computar la solución (el juego del *Sudoku* a pesar de todo tiene muy pocas combinaciones para explorar). En estos casos existen un gran número de técnicas que si el lector le interesa profundizar un poco más le recomiendo el libro [Artificial Intelligence, a modern approach](https://en.wikipedia.org/wiki/Artificial_Intelligence:_A_Modern_Approach) que solo contiene 1132 páginas. Quizás hay otros con menos páginas pero no duden que este está muy bien.
 
 En este mismo repositorio encontraran el notebook `.ipnb` que seguro les puede facilitar seguir este post. Suerte!
 
