@@ -538,6 +538,6 @@ En este mismo repositorio encontrarán el notebook `.ipnb` que seguro les puede 
 
 <a name="agradecimientos"/>
 ## 7. Agradecimientos
-Para este ejercicio nos hemos inspirado en el [post fantástico de Peter Norvig](http://norvig.com/sudoku.html) y parte del programa de [Artificial Intelligence de Udacity](https://www.udacity.com). 
-[Francesc Sastre Cabot](https://xiscosc.github.io/).
-[Alberto Pou Quirós](https://github.com/bertini36)
+Para este ejercicio nos hemos inspirado en el [post fantástico de Peter Norvig](http://norvig.com/sudoku.html) y parte del programa de [Artificial Intelligence de Udacity](https://www.udacity.com).
+
+[Francesc Sastre Cabot](https://xiscosc.github.io/) y [Alberto Pou Quirós](https://github.com/bertini36)
