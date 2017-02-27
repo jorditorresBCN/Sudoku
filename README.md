@@ -463,7 +463,7 @@ display(reduce_sudoku(grid_values(example)))
  16789   126789  26789  | 145789  145678  14579  | 15679   124569    3    
 ```
 
-¿Qué pasa si tenemos un sudoku  que no sabemos solucionar tan fácilmente? Vamos a presentar otra técnica básica del mundo de la Inteligencia Artificial para solucionar este problema. Se conoce como `Search`. No entraremos en detalle, pero la idea es que en el proceso de resolución de problemas, a menudo llegamos al punto en que existen varias posibilidades. Una forma de atacar el problema es crear un árbol completo de posibilidades y encontrar formas de recorrer el árbol hasta encontrar nuestra solución. 
+¿Qué pasa si tenemos un sudoku  que no sabemos solucionar tan fácilmente? Vamos a presentar otra técnica básica del mundo de la Inteligencia Artificial para solucionar este problema. Se conoce como `Backtracking`. No entraremos en detalle, pero la idea es que en el proceso de resolución de problemas, a menudo llegamos al punto en que existen varias posibilidades. Una forma de atacar el problema es crear un árbol completo de posibilidades y recorrer el árbol hasta encontrar nuestra solución. 
  
 Por ejemplo, la casilla `A2` tiene 5 posibilidades: `4`, `5`, `7`, `8` y `9`. Lo que hacemos es considerar que contiene un `4` y resolver el *Sudoku*. Si no lo podemos resolver (nos vendrá indicado por el retorno de `false` en la función `reduce_puzzle()`) probamos con el siguiente, el `5`, y así sucesivamente. Evidentemente es 5 veces más trabajo, pero es la manera de conseguir todas las opciones.
 
@@ -532,10 +532,12 @@ display(solve(example))
 <a name="conclusiones"/>
 
 ## 6. Y para acabar
-En este post he querido mostrar con la excusa de resolver un _Sudoku_  como es un algoritmo que usa técnicas simples de inteligencia artificial. Ahora bien, debo enfatizar que en realidad los problemas como el Ajedrez, GO o Poker, mencionados anteriormente, tienen una complejidad tal que aplicar tal cual el algoritmo `search()` presentado aquí es imposible, pues tardaríamos siglos en computar la solución (el juego del *Sudoku* a pesar de todo tiene muy pocas combinaciones para explorar). En estos casos existen un gran número de técnicas que si el lector le interesa profundizar un poco más le recomiendo el libro [Artificial Intelligence, a modern approach](https://en.wikipedia.org/wiki/Artificial_Intelligence:_A_Modern_Approach) que solo contiene 1132 páginas. Quizás hay otros con menos páginas pero no duden que este está muy bien.
+En este post he querido mostrar con la excusa de resolver un _Sudoku_  como es un algoritmo que usa técnicas simples de inteligencia artificial. Ahora bien, debo enfatizar que en realidad los problemas como el Ajedrez, GO o Poker, mencionados anteriormente, tienen una complejidad tal que aplicar un algoritmo de `Backtracking` como el presentado aquí es imposible, pues tardaríamos siglos en computar la solución (el juego del *Sudoku* a pesar de todo tiene muy pocas combinaciones para explorar). En estos casos existen un gran número de técnicas que si el lector le interesa profundizar un poco más le recomiendo el libro [Artificial Intelligence, a modern approach](https://en.wikipedia.org/wiki/Artificial_Intelligence:_A_Modern_Approach) que solo contiene 1132 páginas. Quizás hay otros con menos páginas pero no duden que este está muy bien.
 
 En este mismo repositorio encontrarán el notebook `.ipnb` que seguro les puede facilitar seguir este post. Suerte!
 
 <a name="agradecimientos"/>
 ## 7. Agradecimientos
 Para este ejercicio nos hemos inspirado en el [post fantástico de Peter Norvig](http://norvig.com/sudoku.html) y parte del programa de [Artificial Intelligence de Udacity](https://www.udacity.com). 
+[Francesc Sastre Cabot](https://xiscosc.github.io/).
+[Alberto Pou Quirós](https://github.com/bertini36)
