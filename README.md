@@ -1,4 +1,7 @@
 # Tu primer programa de Inteligencia Artificial: resolver un Sudoku
+
+POST: http://jorditorres.org/tu-primer-programa-de-inteligencia-artificial-resolver-un-sudoku/
+
 Hace unos días el periodista [Albert Molins publicaba en La Vanguardia](http://jorditorres.org/inteligencia-artificial-y-poquer/) un excelente artículo titulado “Una máquina gana al póquer a los mejores jugadores del mundo” para el que me llamo para contrastar algunos datos sobre este sistema de inteligencia artificial, Libratus, desarrollado por la Universidad Carnegie Mellon. En el mismo artículo Albert se hacia eco de anteriores duelos entre sistemas de inteligencia artificial y humanos en diferentes juegos como el Ajedrez (en 1997 el ordenador Deeper Blue derrotó a Kaspárov), concurso de preguntas y respuestas de la televisión estadounidense (en 2011 el ordenador Watson ganó a Brad Ruttler y Ken Jennings, los dos mejores concursantes del concurso Jeopardy) o el Go (en el 2016 el sistema AlphaGo desarrollado por la empresa DeepMind de Google ganó a Lee Se-dol, campeón mundial de Go).
 
 A raíz de este artículo algunos me han preguntado si podría explicar un poco más a nivel técnico como funcionan por dentro estos sistemas supuestamente inteligentes. Aunque ciertamente son sistemas complejos, que requieren además mucha computación y no están al alcance de cualquiera, no es menos cierto que son algoritmos que un ingeniero informático sin ninguna duda puede entender, y me atrevería a decir, programar. 
