@@ -534,10 +534,8 @@ display(solve(example))
 ## 6. Y para acabar
 En este post he querido mostrar con la excusa de resolver un _Sudoku_  como es un algoritmo que usa técnicas simples de inteligencia artificial. Ahora bien, debo enfatizar que en realidad los problemas como el Ajedrez, GO o Poker, mencionados anteriormente, tienen una complejidad tal que aplicar un algoritmo de `Backtracking` como el presentado aquí es imposible, pues tardaríamos siglos en computar la solución (el juego del *Sudoku* a pesar de todo tiene muy pocas combinaciones para explorar). En estos casos existen un gran número de técnicas que si el lector le interesa profundizar un poco más le recomiendo el libro [Artificial Intelligence, a modern approach](https://en.wikipedia.org/wiki/Artificial_Intelligence:_A_Modern_Approach) que solo contiene 1132 páginas. Quizás hay otros con menos páginas pero no duden que este está muy bien.
 
-En este mismo repositorio encontrarán el notebook `.ipnb` que seguro les puede facilitar seguir este post. Suerte!
+En el [repositorio de github](https://github.com/jorditorresBCN/Sudoku) encontrarán el notebook `.ipynb` que seguro les puede facilitar seguir este post. Suerte!
 
 <a name="agradecimientos"/>
 ## 7. Agradecimientos
-Para este ejercicio nos hemos inspirado en el [post fantástico de Peter Norvig](http://norvig.com/sudoku.html) y parte del programa de [Artificial Intelligence de Udacity](https://www.udacity.com).
-
-[Francesc Sastre Cabot](https://xiscosc.github.io/) y [Alberto Pou Quirós](https://github.com/bertini36)
+Para este ejercicio me he inspirado en el [fantástico post de Peter Norvig](http://norvig.com/sudoku.html) y parte del programa de [Artificial Intelligence de Udacity](https://www.udacity.com). Añadir mi agradecimiento a [Francesc Sastre Cabot](https://xiscosc.github.io/) y [Alberto Pou Quirós](https://github.com/bertini36) por la revisión que han realizado a la versión [github](https://github.com/jorditorresBCN/Sudoku) de este post antes de su publicación. 
