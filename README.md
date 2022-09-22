@@ -81,7 +81,7 @@ lo almacenaremos con el `string`:
 '..3.2.6..9..3.5..1..18.64....81.29..7.......8..67.82....26.95..8..2.3..9..5.1.3..'
 ```
 
-Por otra parte implementaremos el diccionario de tal manera que las *keys* serán los *strings* correspondientes a las casillas (`'A1', 'A2', ..., 'I9'`) y los valores seran o bien el dígito en la casilla o '.'.
+Por otra parte implementaremos el diccionario de tal manera que las *keys* serán los *strings* correspondientes a las casillas (`'A1', 'A2', ..., 'I9'`) y los valores serán o bien el dígito en la casilla o '.'.
 
 Para generar nuestra estructura de datos que contendrá el tablero cuadriculado vamos a empezar programando una función de soporte que llamaremos `cross(a, b)` que dados dos strings `a` y `b` la función retorna la lista  (recordemos que una lista se especifica con `[` `]`) formada por todas las posibles concatenaciones de letras `s` en el string `a` con la `t` en el string `b`.  
 
@@ -100,7 +100,7 @@ boxes = cross(rows, cols)
 ```
 Podemos comprobarlo con `print boxes` o `print (boxes)` (dependiendo si usamos Python 2.x o 3.x) que nos dará la siguiente salida:
 ```python
-[['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9'], ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9'], ['C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9'], ['D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8', 'D9'], ['E1', 'E2', 'E3', 'E4', 'E5', 'E6', 'E7', 'E8', 'E9'], ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9'], ['G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G7', 'G8', 'G9'], ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'H7', 'H8', 'H9'], ['I1', 'I2', 'I3', 'I4', 'I5', 'I6', 'I7', 'I8', 'I9']]
+['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8', 'D9', 'E1', 'E2', 'E3', 'E4', 'E5', 'E6', 'E7', 'E8', 'E9', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G7', 'G8', 'G9', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'H7', 'H8', 'H9', 'I1', 'I2', 'I3', 'I4', 'I5', 'I6', 'I7', 'I8', 'I9']
 
 ```
 
@@ -259,14 +259,14 @@ Juntamos todo en una sola lista:
 unitlist = row_units + column_units + square_units
 
 ```
-Con el constructor `dict()` que construye diccionarios directamente de secuencias de pares clave-valor vamos a generar el diccionario `units` que nos dice por cada casilla `s in boxes` que casillas componen la fila, la columna i el cuadrado de 3x3 cuyo valor debemos tener en cuenta: 
+Vamos a generar el diccionario `units` que nos dice por cada casilla `s in boxes` que casillas componen la fila, la columna i el cuadrado de 3x3 cuyo valor debemos tener en cuenta: 
 ```python
-units = dict((s, [u for u in unitlist if s in u]) for s in boxes)
+units = {s: [u for u in unitlist if s in u] for s in boxes}
  ```
 Por otro lado, usando el módulo `sets` (que permite construir y manipular colecciones no ordenadas de elementos únicos) construimos el diccionario `peers` que nos elimina duplicados de casillas por cada casilla:
 
 ```python
-peers = dict((s, set(sum(units[s],[]))-set([s])) for s in boxes)
+peers = {s: set(sum(units[s],[]))-set([s]) for s in boxes}
  ```
 
 En resumen, la función `eliminate()` iterará sobre todas las celdas de la cuadrícula que tienen solo un valor asignado, y borrará este valor de todos sus pares. La vamos a implementar de tal manera que reciba como entrada un diccionario y retornará otro diccionario con los valores eliminados.
